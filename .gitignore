@@ -16,3 +16,4 @@ npm-debug.log*
 # Project Files from Treehouse
 /treehouseProjectFiles
 /Sequelize/*
+/sqlRound2/*
