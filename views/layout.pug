@@ -1,8 +1,9 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    p This is Pug generated!
-    block content
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body
+		include partials/nav.pug
+		p This is Pug generated!
+		block content
