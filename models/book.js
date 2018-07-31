@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Book = sequelize.define('Book', {
-    id: DataTypes.INTEGER,
+    // id: DataTypes.INTEGER,
     title: DataTypes.STRING,
     author: DataTypes.TEXT,
     genre: DataTypes.STRING,
