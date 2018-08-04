@@ -5,7 +5,7 @@ const Book = require('../models').Book;
 /* GET home page. */
 // TODO Fix this route so it only displays when it matches the URL path!
 router.get('/', (req, res, next) => {
-	res.render('index', {title: 'Library PROJECT'});
+	res.render('index', {title: 'Library Manager'});
 });
 
 router.get('/all_books', (req, res, next) => {
