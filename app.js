@@ -9,6 +9,8 @@ var mainRouter = require('./routes');
 
 var app = express();
 
+const port = process.env.PORT || 4040;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -36,6 +38,10 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.listen(() => {
+	console.log(`The SQL Project application is running on localhost ${port}`);
 });
 
 module.exports = app;
