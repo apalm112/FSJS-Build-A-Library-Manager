@@ -14,6 +14,7 @@ npm-debug.log*
 .eslintrc
 
 # Project Files from Treehouse
+/treehouseProjectFiles/**
 /treehouseProjectFiles/README.md
 /treehouseProjectFiles/library-manager-v1.zip
 /treehouseProjectFiles/library.db

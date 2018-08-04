@@ -1,11 +1,12 @@
-extends layout
+extends index
 
 block content
-	h1= message
-	h2= error.status
-	pre #{error.stack}
+	if error
+		h1= message
+		h2= error.status
+		pre #{error.stack}
 
 
-	h2.error Oooops!
-	ul.error
-			li Author is required
+		h2.error Oooops!
+		ul.error
+				li Author is required, remove this
