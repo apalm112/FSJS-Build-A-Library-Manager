@@ -40,11 +40,13 @@ router.get('/checked_loans', (req, res, next) => {
 	res.render('checked_loans');
 });
 
-/*
-router.get('/', (req, res, next) => {
-	res.render('');
+
+router.get('/book_detail', (req, res, next) => {
+	res.render('book_detail');
 });
 
+
+/*
 router.get('/', function(req, res, next) {
 	Book.findAll({ order: [[ 'title' ]]}).then(books => {
 		console.log('books ---------> :', books[0].title);

@@ -1,9 +1,12 @@
-if error
-	h1= message
-	h2= error.status
-	pre #{error.stack}
+extends index
+
+block content
+	if error
+		h1= message
+		h2= error.status
+		pre #{error.stack}
 
 
-	h2.error Oooops!
-	ul.error
-			li Author is required, remove this
+		h2.error Oooops!
+		ul.error
+				li Author is required, remove this
