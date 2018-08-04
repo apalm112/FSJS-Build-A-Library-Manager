@@ -43,20 +43,12 @@ router.get('/checked_loans', (req, res, next) => {
 /*
 router.get('/', (req, res, next) => {
 	res.render('');
-});*/
-/*
-router.get('/', function(req, res, next) {
-	res.redirect('/users');
 });
 
 router.get('/', function(req, res, next) {
 	Book.findAll({ order: [[ 'title' ]]}).then(books => {
 		console.log('books ---------> :', books[0].title);
 	});
-});
-
-router.get('/book/all_books.pug', function(req, res, next) {
-	res.render('all_books.pug');
 });
 */
 
