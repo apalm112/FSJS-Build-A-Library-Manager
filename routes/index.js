@@ -24,6 +24,10 @@ router.get('/all_patrons', (req, res, next) => {
 	res.render('all_patrons');
 });
 
+router.get('/patron_details', (req, res, next) => {
+	res.render('patron_details');
+});
+
 router.get('/new_loan', (req, res, next) => {
 	res.render('new_loan');
 });
@@ -36,13 +40,24 @@ router.get('/overdue_loans', (req, res, next) => {
 	res.render('overdue_loans');
 });
 
+router.get('/overdue_books', (req, res, next) => {
+	res.render('overdue_books');
+});
+
 router.get('/checked_loans', (req, res, next) => {
 	res.render('checked_loans');
 });
 
-
 router.get('/book_detail', (req, res, next) => {
 	res.render('book_detail');
+});
+
+router.get('/return_book', (req, res, next) => {
+	res.render('return_book');
+});
+
+router.get('/checked_books', (req, res, next) => {
+	res.render('checked_books');
 });
 
 
