@@ -34,12 +34,15 @@ sequelize.authenticate().then(() => {
 /* GET books listing. */
 router.get('/', (req, res, next) => {
 	Book.findAll({ order: [[ 'createdAt', 'DESC' ]]}).then(books => {
-		res.render('index', {books: books, title: 'Loobrary Manuhger oh wow'});
+		res.render('index', {
+			books: books,
+			title: 'Loobrary Manuhger oh wow'
+		});
 		// console.log('router.get: books.title: ************************************** ', books.title);
 	});
 });
 
-// TODO: not getting a req.body Object.  Fix that.
+
 /* POST, create a new book in the library.db */
 /* POST create article. */
 router.post('/', (req, res, next) => {
@@ -91,20 +94,43 @@ router.get('/new_patron', (req, res, next) => {
 });
 
 router.get('/all_patrons', (req, res, next) => {
-	res.render('all_patrons', {title: 'Patrons'});
+	Patron.findAll().then(patrons => {
+		res.render('all_patrons', {
+			patrons: patrons,
+			title: 'Patrons'
+		});
+
+	});
 });
 
 router.get('/patron_details', (req, res, next) => {
 	res.render('patron_details');
 });
 
-router.get('/new_loan', (req, res, next) => {
-	res.render('new_loan');
-});
+
+// TODO: Wire up teh Loan Routes.
 
 router.get('/all_loans', (req, res, next) => {
-	res.render('all_loans', {title: 'Loans'});
+	Loan.findAll().then(loans => {
+		res.render('all_loans', {
+			loans: loans,
+			title: 'Loans'
+		});
+		console.log('OVER HERE YO: ', loans);
+	});
 });
+
+
+router.get('/new_loan', (req, res, next) => {
+	Loan.create(req.body).then(loans => {
+		res.render('new_loan', {
+			loans: loans,
+			title: 'New Loan YO'
+		});
+		console.log('ROBOTS CREATE A NEW LOAN:                  :', loans);
+	});
+});
+
 
 router.get('/overdue_loans', (req, res, next) => {
 	res.render('overdue_loans');
