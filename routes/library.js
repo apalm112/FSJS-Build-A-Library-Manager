@@ -32,9 +32,9 @@ sequelize.authenticate().then(() => {
 
 /* GET books listing. */
 router.get('/', (req, res, next) => {
-	Book.findAll({ order: [[ 'createdAt', 'DESC' ]]}).save().then(books => {
+	Book.findAll({ order: [[ 'createdAt', 'DESC' ]]}).then(books => {
 		res.render('index', {books: books, title: 'Loobrary Manuhger oh wow'});
-		console.log('router.get: REQ BODY:************************************** ', req);
+		// console.log('router.get: books.title: ************************************** ', books.title);
 	});
 });
 
@@ -44,12 +44,21 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
 	Book.create(req.body).then((book) => {
 		res.redirect('/library/all_books');
-		console.log('router.post: REQ BODY:************************************** ', req.body);
+		console.log('router.post: book.title BODY:************************************** ', book.title);
 	});
 });
 
 router.get('/all_books', (req, res, next) => {
-	res.render('all_books', {title: 'Books'});
+	Book.findAll().then(books => {
+		res.render('all_books', {
+			books: books,
+			title: 'Books'
+		});
+
+		console.log('router.get ---> /all_books --> books[0].title: ', books[0].title);
+		// console.log('router.get: books.title: ************************************** ', books.title);
+		// 			#{book.id.title}
+	});
 });
 
 router.get('/new_book', (req, res, next) => {
