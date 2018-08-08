@@ -6,12 +6,12 @@
   },
   "test": {
 		"operatorsAliases": false,
-    "storage": "library.db",
+    "storage": "test.db",
     "dialect": "sqlite"
   },
   "production": {
 		"operatorsAliases": false,
-    "storage": "library.db",
+    "storage": "production.db",
     "dialect": "sqlite"
   }
 }
