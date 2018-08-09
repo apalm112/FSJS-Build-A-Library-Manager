@@ -1,22 +1,9 @@
 extends index
 
 block content
-  h1 Book: A Brief History of Time
-  form
-    p
-      label(for='title') Title
-      input#title(type='text', value='A Brief History of Time')
-    p
-      label(for='author') Author
-      input#author(type='text', value='Stephen Hawking')
-    p
-      label(for='genre') Genre
-      input#genre(type='text', value='Non Fiction')
-    p
-      label(for='first_published') First Published
-      input#first_published(type='text', value='1988')
-    p
-      input(type='submit', value='Update')
+  h1= title
+  form(action='/books/book_detail', method='post')
+    include partials/form
   h2 Loan History
   table
     thead
@@ -30,9 +17,10 @@ block content
     tbody
       tr
         td
-          a(href='book_detail') A Brief History of Time
+          a(href='book_detail' + book.id) #{book.title}
         td
-          a(href='patron_detail') Andrew Chalkley
+          a(href='patron_detail') Patron Name Here 
+          //- #{book.book_id to get patron_id to get patron_name}  #{patron.first_name} #{patron.last_name} 
         td 2015-12-12
         td 2015-12-19
         td

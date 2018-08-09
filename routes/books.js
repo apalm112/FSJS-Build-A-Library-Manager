@@ -8,18 +8,23 @@ const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
 router.get('/new_book', (req, res, next) => {
-	res.render('new_book', {title: 'New Book'});
+	res.render('new_book', {
+		book: Book.build(req.body),
+		title: 'New Book',
+		button_text: 'Create New Book',
+	});
 });
 
 /* POST, create a new book in the library.db */
 router.post('/new_book', (req, res, next) => {
-	Book.create(req.body).then((book) => {
+	Book.create(req.body).then(() => {
 		res.redirect('/books/all_books');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('new_book', {
 				book: Book.build(req.body),
 				title: 'New Book',
+				button_text: 'Create New Book',
 				errors: error.errors
 			});
 		} else {
@@ -63,14 +68,28 @@ router.get('/overdue_books', (req, res, next) => {
 	});
 });
 
+// GET individual Book Details
+router.get('/book_detail/:id', (req, res, next) => {
+	// Get the book_id of the book clicked on in all_books
+	Book.findById(req.params.id).then(books => {
+		console.log('HERE: ------------> ', req.params.id);
+		// get that books data & render it to book_detail
+		if(books) {
+			res.render('book_detail', {
+				book: books,
+				title: 'Book: ' + books.title,
+				button_text: 'Update',
+			});
+		} else {
+			res.sendStatus(404);
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
+});
 
 router.get('/checked_books', (req, res, next) => {
 	res.render('checked_books');
-});
-
-
-router.get('/book_detail', (req, res, next) => {
-	res.render('book_detail');
 });
 
 module.exports = router;
