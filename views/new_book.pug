@@ -2,6 +2,10 @@ extends index
 
 block content
   h1= title
+  if error
+    h1= message
+    h2= error.status
+    p #{error.stack}
   form(action='/books/new_book', method='post')
     p
       label(for='title') Title

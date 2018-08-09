@@ -10,13 +10,26 @@ const Loan = require('../models').loans;
 router.get('/new_book', (req, res, next) => {
 	res.render('new_book', {title: 'New Book'});
 });
+
 /* POST, create a new book in the library.db */
 router.post('/new_book', (req, res, next) => {
 	Book.create(req.body).then((book) => {
 		res.redirect('/books/all_books');
-		// console.log('router.post: book.title BODY:************************************** ', book.title);
+	}).catch((error) => {
+		if(error.name === 'SequelizeValidationError') {
+			res.render('new_book', {
+				book: Book.build(req.body),
+				title: 'New Book No Erros This Time!',
+				errors: error.errors
+			})
+		} else {
+			throw error;
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);
 	});
 });
+// });
 
 router.get('/all_books', (req, res, next) => {
 	Book.findAll().then(books => {
