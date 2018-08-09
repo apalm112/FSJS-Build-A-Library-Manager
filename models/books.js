@@ -8,12 +8,27 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		title: {
 			type: DataTypes.STRING,
+			validate: {
+				notEmpty: {
+					msg: 'Book Title is required!'
+				}
+			}
 		},
 		author: {
 			type: DataTypes.STRING,
+			validate: {
+				notEmpty: {
+					msg: 'Author is required!'
+				}
+			}
 		},
 		genre: {
 			type: DataTypes.STRING,
+			validate: {
+				notEmpty: {
+					msg: 'Book genre is required!'
+				}
+			}
 		},
 		first_published: {
 			type: DataTypes.INTEGER,
