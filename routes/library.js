@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
@@ -44,7 +45,7 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
 	Book.create(req.body).then((book) => {
 		res.redirect('/library/all_books');
-		console.log('router.post: book.title BODY:************************************** ', book.title);
+		// console.log('router.post: book.title BODY:************************************** ', book.title);
 	});
 });
 
@@ -54,15 +55,35 @@ router.get('/all_books', (req, res, next) => {
 			books: books,
 			title: 'Books'
 		});
-
-		console.log('router.get ---> /all_books --> books[0].title: ', books[0].title);
+		// console.log('router.get ---> /all_books --> books[0].title: ', books[0].title);
 		// console.log('router.get: books.title: ************************************** ', books.title);
 		// 			#{book.id.title}
 	});
 });
 
+router.get('/overdue_books', (req, res, next) => {
+	//- 'books?filter=overdue'
+	//- SELECT * from BOOKS WHERE BOOK.ID in LOANS WHERE return_by [Op.gt]: today
+	const today = (new Date()).toISOString().slice(0,10);
+	Loan.findAll({
+		where: {
+			return_by: {
+				[Op.gt]: today,
+			//	id: true,
+			}
+		}
+	}).then(loans => {
+		res.render('overdue_books', {
+			loans: loans,
+			title: 'Overdue Books'
+		});
+		console.log('router.get ---> /overdue_books --> loans[0].title: ', loans);
+		// console.log('router.get: loans.title: ************************************** ', loans.title);
+	});
+});
+
 router.get('/new_book', (req, res, next) => {
-	res.render('new_book');
+	res.render('new_book', {title: 'New Book'});
 });
 
 router.get('/new_patron', (req, res, next) => {
@@ -87,10 +108,6 @@ router.get('/all_loans', (req, res, next) => {
 
 router.get('/overdue_loans', (req, res, next) => {
 	res.render('overdue_loans');
-});
-
-router.get('/overdue_books', (req, res, next) => {
-	res.render('overdue_books');
 });
 
 router.get('/checked_loans', (req, res, next) => {

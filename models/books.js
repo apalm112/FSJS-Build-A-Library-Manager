@@ -1,7 +1,11 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-	var books = sequelize.define('books', {
+	const books = sequelize.define('books', {
+		id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+		},
 		title: {
 			type: DataTypes.STRING,
 		},
