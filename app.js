@@ -1,17 +1,15 @@
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const createError = require('http-errors');
-const methodOverride = require('method-override');
+var express = require('express');
+var path = require('path');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var createError = require('http-errors');
+var methodOverride = require('method-override');
 
-const routes = require('./routes/index');
-const books = require('./routes/books');
-const patrons = require('./routes/patrons');
-const loans = require('./routes/loans');
+var routes = require('./routes/index');
+var library = require('./routes/library');
 
-const app = express();
+var app = express();
 
 const port = process.env.PORT || 4040;
 
@@ -29,16 +27,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/books', books);
-app.use('/patrons', patrons);
-app.use('/loans', loans);
+app.use('/library', library);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	// const err = new Error('Not Found, eh!');
-	// err.status = 404;  
-	// next(err);
-  next(createError(404)); // This line was original code, above 3 lines are new.
+  next(createError(404));
 });
 
 // error handler
@@ -51,31 +44,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
-// development error handler
-// will print stacktrace
-/*if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});*/
-
-
 
 app.listen(() => {
 	console.log(`The SQL Project application is running on localhost ${port}`);
