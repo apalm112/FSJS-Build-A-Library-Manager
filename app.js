@@ -1,15 +1,17 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var createError = require('http-errors');
-var methodOverride = require('method-override');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const createError = require('http-errors');
+const methodOverride = require('method-override');
 
-var routes = require('./routes/index');
-var library = require('./routes/library');
+const routes = require('./routes/index');
+const books = require('./routes/books');
+const loans = require('./routes/loans');
+const patrons = require('./routes/patrons');
 
-var app = express();
+const app = express();
 
 const port = process.env.PORT || 4040;
 
@@ -27,7 +29,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/library', library);
+app.use('/books', books);
+app.use('/loans', loans);
+app.use('/patrons', patrons);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
