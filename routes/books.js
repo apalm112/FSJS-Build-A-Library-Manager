@@ -19,9 +19,9 @@ router.post('/new_book', (req, res, next) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('new_book', {
 				book: Book.build(req.body),
-				title: 'New Book No Erros This Time!',
+				title: 'New Book',
 				errors: error.errors
-			})
+			});
 		} else {
 			throw error;
 		}
@@ -29,7 +29,6 @@ router.post('/new_book', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
-// });
 
 router.get('/all_books', (req, res, next) => {
 	Book.findAll().then(books => {
