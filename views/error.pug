@@ -1,7 +1,8 @@
 extends layout
 
 block content
+	//- This error template injects a 404 Not Found error message into any page that a user attempts to load which does not exist.
 	if error
 		h1= message
 		h2= error.status
-		p #{error.stack}
+		pre #{error.stack}
