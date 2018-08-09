@@ -83,7 +83,7 @@ router.get('/overdue_books', (req, res, next) => {
 });
 
 router.get('/new_book', (req, res, next) => {
-	res.render('new_book');
+	res.render('new_book', {title: 'New Book'});
 });
 
 router.get('/new_patron', (req, res, next) => {
