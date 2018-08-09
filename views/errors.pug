@@ -1,7 +1,6 @@
 //- This pug template injects the validation errors into the /books/new_book page form.  It stops any blank fields from being submitted into the books table.
-
 if(errors)
-	h2.errors Ooops an error occured!
+	h2.errors An Error occured!
 	ul.errors
 		each error in errors
 			li
