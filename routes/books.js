@@ -68,8 +68,8 @@ router.get('/overdue_books', (req, res, next) => {
 	});
 });
 
-// GET individual Book Details
-router.get('/book_detail/:id', (req, res, next) => {
+// GET individual Book Details, when an individual book link is clicked on the `/books/all_books` page, the user is redirected by this route to the `/books/book_detail/:id/edit` page.
+router.get('/book_detail/:id/edit', (req, res, next) => {
 	// Get the book_id of the book clicked on in all_books
 	Book.findById(req.params.id).then(books => {
 		// get that books data & render it to book_detail
@@ -87,12 +87,12 @@ router.get('/book_detail/:id', (req, res, next) => {
 	});
 });
 
-/* PUT, update a book in the library.db */
+/* PUT, the `books/book_detail/:id/edit` page,
+				update a book in the library.db */
 router.put('/:id', (req, res, next) => {
-	// console.log('HERE: ------------> ', req.body);
-	Book.findById(req.params.id).then((book) => {
-		if(book) {
-			return book.update(req.body);
+	Book.findById(req.params.id).then((books) => {
+		if(books) {
+			return books.update(req.body);
 		} else {
 			res.sendStatus(404);
 		}
@@ -102,9 +102,9 @@ router.put('/:id', (req, res, next) => {
 		if(error.name === 'SequelizeValidationError') {
 			const book = Book.build(req.body);
 			book.id = req.params.id;
-			res.render('books/edit', {
+			res.render('book_detail', {
 				book: book,
-				title: 'Book:' + book.id,
+				title: 'Book:' + book.title,
 				button_text: 'Update',
 				errors: error.errors
 			});
@@ -115,7 +115,6 @@ router.put('/:id', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
-
 
 router.get('/checked_books', (req, res, next) => {
 	res.render('checked_books');
