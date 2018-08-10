@@ -88,7 +88,7 @@ router.get('/book_detail/:id/edit', (req, res, next) => {
 });
 
 /* PUT, the `books/book_detail/:id/edit` page,
-				update a book in the library.db */
+				update/edit a book in the library.db */
 router.put('/:id', (req, res, next) => {
 	Book.findById(req.params.id).then((books) => {
 		if(books) {
