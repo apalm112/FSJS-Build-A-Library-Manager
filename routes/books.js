@@ -63,7 +63,7 @@ router.get('/overdue_books', (req, res, next) => {
 			loans: loans,
 			title: 'Overdue Books'
 		});
-		console.log('router.get ---> /overdue_books --> loans[0].title: ', loans);
+		// console.log('router.get ---> /overdue_books --> loans[0].title: ', loans);
 		// console.log('router.get: loans.title: ************************************** ', loans.title);
 	});
 });
@@ -72,7 +72,6 @@ router.get('/overdue_books', (req, res, next) => {
 router.get('/book_detail/:id', (req, res, next) => {
 	// Get the book_id of the book clicked on in all_books
 	Book.findById(req.params.id).then(books => {
-		console.log('HERE: ------------> ', req.params.id);
 		// get that books data & render it to book_detail
 		if(books) {
 			res.render('book_detail', {
@@ -87,6 +86,36 @@ router.get('/book_detail/:id', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
+
+/* PUT, update a book in the library.db */
+router.put('/:id', (req, res, next) => {
+	// console.log('HERE: ------------> ', req.body);
+	Book.findById(req.params.id).then((book) => {
+		if(book) {
+			return book.update(req.body);
+		} else {
+			res.sendStatus(404);
+		}
+	}).then((book) =>  {
+		res.redirect('/books/all_books');
+	}).catch((error) => {
+		if(error.name === 'SequelizeValidationError') {
+			const book = Book.build(req.body);
+			book.id = req.params.id;
+			res.render('books/edit', {
+				book: book,
+				title: 'Book:' + book.id,
+				button_text: 'Update',
+				errors: error.errors
+			});
+		} else {
+			throw error;
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
+});
+
 
 router.get('/checked_books', (req, res, next) => {
 	res.render('checked_books');

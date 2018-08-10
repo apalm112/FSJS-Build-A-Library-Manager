@@ -2,27 +2,6 @@ extends index
 
 block content
   h1= title
-  form(action='/books/book_detail', method='post')
+  form(action='/books/' + book.id + '?_method=PUT', method='post')
     include partials/form
-  h2 Loan History
-  table
-    thead
-      tr
-        th Book
-        th Patron 
-        th Loaned on
-        th Return by 
-        th Returned on
-        th Action
-    tbody
-      tr
-        td
-          a(href='book_detail' + book.id) #{book.title}
-        td
-          a(href='patron_detail') Patron Name Here 
-          //- #{book.book_id to get patron_id to get patron_name}  #{patron.first_name} #{patron.last_name} 
-        td 2015-12-12
-        td 2015-12-19
-        td
-        td
-          a.button(href='return_book') Return Book
+    include partials/loan_history
