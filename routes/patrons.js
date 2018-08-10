@@ -34,8 +34,8 @@ router.get('/all_patrons', (req, res, next) => {
 	res.render('all_patrons', {title: 'Patrons'});
 });
 
-router.get('/patron_details', (req, res, next) => {
-	res.render('patron_details');
+router.get('/patron_detail', (req, res, next) => {
+	res.render('patron_detail');
 });
 
 

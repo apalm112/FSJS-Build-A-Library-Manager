@@ -6,5 +6,5 @@ block content
 	
 	h1= title
 	form(action='/books/' + book.id + '?_method=PUT', method='post')
-		include partials/form
+		include partials/book_form
 	include partials/loan_history
