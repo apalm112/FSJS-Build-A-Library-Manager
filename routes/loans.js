@@ -20,6 +20,7 @@ router.post('/new_loan', (req, res, next) => {
 			res.render('new_loan', {
 				loan: Loan.build(req.body),
 				title: 'New Loan',
+				button_text: 'Create New Loan',
 				errors: error.errors
 			});
 		} else {
