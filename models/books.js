@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			allowNull: false,
+			autoIncrement: true,
 		},
 		title: {
 			type: DataTypes.STRING,
@@ -33,9 +35,17 @@ module.exports = (sequelize, DataTypes) => {
 		first_published: {
 			type: DataTypes.INTEGER,
 		},
+	}, {
+		timestamps: false
 	});
 	books.associate = function(models) {
 		// associations can be defined here
+		books.hasOne(models.loans);
 	};
+	// Instance Methods
+	// Helper Method below.
+	/*books.prototype.publishedAt = function() {
+		return dateFormat(this.createdAt, 'dddd, mmmm dS, yyyy, h:MM TT');
+	};*/
 	return books;
 };

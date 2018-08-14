@@ -1,11 +1,14 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
 	const loans = sequelize.define('loans', {
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			allowNull: false,
+			autoIncrement: true,
 		},
-		book_id: {
+/*		book_id: {
 			type: DataTypes.INTEGER,
 			validate: {
 				notEmpty: {
@@ -20,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'Patron ID is required!'
 				}
 			}
-		},
+		},*/
 		loaned_on: {
 			type: DataTypes.DATE,
 			validate: {
@@ -40,9 +43,13 @@ module.exports = (sequelize, DataTypes) => {
 		returned_on: {
 			type: DataTypes.DATE,
 		},
-	}, {});
+	}, {
+		timestamps: false
+	});
 	loans.associate = function(models) {
 		// associations can be defined here
+		loans.belongsTo(models.books);
+		loans.belongsTo(models.patrons);
 	};
 	return loans;
 };
