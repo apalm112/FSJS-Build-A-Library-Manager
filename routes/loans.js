@@ -5,15 +5,42 @@ const Sequelize = require('sequelize');
 const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
+const db = require('../models').index;
 
-
-router.get('/new_loan', (req, res, next) => {
-	res.render('new_loan');
+router.get('/all_loans', (req, res, next) => {
+	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
+	// Loan.findAll().then(loans => {
+		Loan.findAll({
+			include: [
+				{
+					model: Patron,
+				}
+			]
+		}).then(loans => {
+			res.render('all_loans', {
+				loans: loans,
+				patrons: Patron.patron_id,
+				books: Book.book_id,
+				title: 'Loans'
+			});
+			console.log('-----------------------------------------------> ', loans);
+		});
 });
 
-/* POST, create a new loan in the library.db */
+router.get('/new_loan', (req, res, next) => {
+	// This route displays the 'new_loan' page & allows a user to add a new loan to the library.db
+	Loan.findAll().then(loans => {
+		res.render('new_loan', {
+			loans: Loan.build(req.body),
+			books: Book.build(req.body),
+			title: 'New Loan',
+		});
+	});
+});
+
 router.post('/new_loan', (req, res, next) => {
-	Loan.create(req.body).then((loan) => {
+	/* POST, create a new loan in the library.db */
+	Loan.create(req.body).then(() => {
 		res.redirect('/loans/all_loans');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
@@ -29,11 +56,6 @@ router.post('/new_loan', (req, res, next) => {
 	}).catch((error) => {
 		res.sendStatus(500, error);
 	});
-});
-
-
-router.get('/all_loans', (req, res, next) => {
-	res.render('all_loans', {title: 'Loans'});
 });
 
 router.get('/overdue_loans', (req, res, next) => {

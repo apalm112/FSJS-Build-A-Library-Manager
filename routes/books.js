@@ -8,6 +8,7 @@ const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
 router.get('/new_book', (req, res, next) => {
+	/* Render the new book form. */
 	res.render('new_book', {
 		book: Book.build(req.body),
 		title: 'New Book',
@@ -15,8 +16,8 @@ router.get('/new_book', (req, res, next) => {
 	});
 });
 
-/* POST, create a new book in the library.db */
 router.post('/new_book', (req, res, next) => {
+	/* POST, create a new book in the library.db, validates the user input. */
 	Book.create(req.body).then(() => {
 		res.redirect('/books/all_books');
 	}).catch((error) => {
@@ -36,6 +37,7 @@ router.post('/new_book', (req, res, next) => {
 });
 
 router.get('/all_books', (req, res, next) => {
+	/* Render the all_books page, listing all of the books in the database. */
 	Book.findAll().then(books => {
 		res.render('all_books', {
 			books: books,
@@ -48,6 +50,7 @@ router.get('/all_books', (req, res, next) => {
 });
 
 router.get('/overdue_books', (req, res, next) => {
+	/* Render the overdue books page. */
 	//- 'books?filter=overdue'
 	//- SELECT * from BOOKS WHERE BOOK.ID in LOANS WHERE return_by [Op.gt]: today
 	const today = (new Date()).toISOString().slice(0,10);
@@ -68,8 +71,8 @@ router.get('/overdue_books', (req, res, next) => {
 	});
 });
 
-// GET individual Book Details, when an individual book link is clicked on the `/books/all_books` page, the user is redirected by this route to the `/books/book_detail/:id/edit` page.
 router.get('/book_detail/:id/edit', (req, res, next) => {
+	// GET individual Book Details, when an individual book link is clicked on the `/books/all_books` page, the user is redirected by this route to the `/books/book_detail/:id/edit` page.
 	// Get the book_id of the book clicked on in all_books
 	Book.findById(req.params.id).then(books => {
 		// get that books data & render it to book_detail
@@ -87,21 +90,23 @@ router.get('/book_detail/:id/edit', (req, res, next) => {
 	});
 });
 
-/* PUT, the `books/book_detail/:id/edit` page,
-				update/edit a book in the library.db */
 router.put('/:id', (req, res, next) => {
+	/* PUT, the `books/book_detail/:id/edit` page,
+	update/edit a book in the library.db */
 	Book.findById(req.params.id).then((books) => {
 		if(books) {
+	// What's happening here is the update() method is returning a Promise, that passes the next value down the .then chain.
 			return books.update(req.body);
 		} else {
 			res.sendStatus(404);
 		}
+	// Once the update has happened, Then we can redirect to the individual article.
 	}).then((book) =>  {
 		res.redirect('/books/all_books');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			const book = Book.build(req.body);
-			book.id = req.params.id;
+			// book.id = req.params.id;
 			res.render('book_detail', {
 				book: book,
 				title: 'Book:' + book.title,
@@ -119,5 +124,6 @@ router.put('/:id', (req, res, next) => {
 router.get('/checked_books', (req, res, next) => {
 	res.render('checked_books');
 });
+
 
 module.exports = router;
