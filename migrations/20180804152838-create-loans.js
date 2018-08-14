@@ -3,7 +3,6 @@ module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.createTable('loans', {
 			id: {
-				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER
@@ -21,14 +20,6 @@ module.exports = {
 				type: Sequelize.DATE
 			},
 			returned_on: {
-				type: Sequelize.DATE
-			},
-			createdAt: {
-				allowNull: false,
-				type: Sequelize.DATE
-			},
-			updatedAt: {
-				allowNull: false,
 				type: Sequelize.DATE
 			}
 		});
