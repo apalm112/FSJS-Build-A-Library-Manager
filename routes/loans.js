@@ -14,16 +14,17 @@ router.get('/all_loans', (req, res, next) => {
 			include: [
 				{
 					model: Patron,
+					// as: 'id',
 				}
 			]
 		}).then(loans => {
 			res.render('all_loans', {
 				loans: loans,
-				patrons: Patron.patron_id,
-				books: Book.book_id,
+				patrons: Patron,
+				books: Book,
 				title: 'Loans'
 			});
-			console.log('-----------------------------------------------> ', loans);
+			console.log('-----------------------------------------------> ', loans[0]);
 		});
 });
 
@@ -33,8 +34,10 @@ router.get('/new_loan', (req, res, next) => {
 		res.render('new_loan', {
 			loans: Loan.build(req.body),
 			books: Book.build(req.body),
+			patrons: Patron.build(req.body),
 			title: 'New Loan',
 		});
+		console.log('/NEW_LOAN-----------------------------------------------> ', books);
 	});
 });
 

@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
 			validate: {
 				notEmpty: {
 					msg: 'Patron First Name is required!'
+				},
+				isAlpha: {
+					msg: 'First Name field must contain only letters.'
 				}
 			}
 		},
@@ -21,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
 			validate: {
 				notEmpty: {
 					msg: 'Patron Last Name is required!'
+				},
+				isAlpha: {
+					msg: 'Last Name field must contain only letters.'
 				}
 			}
 		},
@@ -37,6 +43,9 @@ module.exports = (sequelize, DataTypes) => {
 			validate: {
 				notEmpty: {
 					msg: 'Patron Email is required!'
+				},
+				isEmail: {
+					msg: 'Email must be valid format.'
 				}
 			}
 		},
@@ -51,9 +60,14 @@ module.exports = (sequelize, DataTypes) => {
 		zip_code: {
 			type: DataTypes.INTEGER,
 			validate: {
+				// max: 6,  these two are Not working
+				// min: 5,
 				notEmpty: {
 					msg: 'Patron Zip Code is required!'
-				}
+				},
+				isNumeric: {
+					msg: 'Zip Code can contain only numbers.'
+				},
 			}
 		},
 	}, {
@@ -61,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	patrons.associate = function(models) {
 		// associations can be defined here
-		patrons.hasMany(models.loans);
+		// patrons.hasMany(models.loans, { as: 'patron_id' });
 	};
 	return patrons;
 };
