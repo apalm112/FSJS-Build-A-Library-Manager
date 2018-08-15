@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
-			allowNull: false,
 			autoIncrement: true,
+			allowNull: false,
 		},
 /*		book_id: {
 			type: DataTypes.INTEGER,
@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
 			validate: {
 				notEmpty: {
 					msg: 'Loan Date is required!'
-				}
+				},
+				isDate: true,
 			}
 		},
 		return_by: {
@@ -37,19 +38,24 @@ module.exports = (sequelize, DataTypes) => {
 			validate: {
 				notEmpty: {
 					msg: 'Return By Date is required!'
-				}
+				},
+				isDate: true,
 			}
 		},
 		returned_on: {
 			type: DataTypes.DATE,
+			isDate: true,
 		},
 	}, {
 		timestamps: false
 	});
 	loans.associate = function(models) {
 		// associations can be defined here
-		loans.belongsTo(models.books);
-		loans.belongsTo(models.patrons);
+		loans.hasOne(models.patrons, { foreignKey : 'id' });
+		loans.hasOne(models.books, { foreignKey : 'id' });
+		// loans.belongsTo(models.books);
+		//  ,  { as: 'book_id' }
+		// loans.belongsTo(models.patrons, { as: 'patron_id' });
 	};
 	return loans;
 };

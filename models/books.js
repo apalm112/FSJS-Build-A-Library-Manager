@@ -34,18 +34,14 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		first_published: {
 			type: DataTypes.INTEGER,
+			isDate: true,
 		},
 	}, {
 		timestamps: false
 	});
 	books.associate = function(models) {
 		// associations can be defined here
-		books.hasOne(models.loans);
+		// books.hasOne(models.loans);
 	};
-	// Instance Methods
-	// Helper Method below.
-	/*books.prototype.publishedAt = function() {
-		return dateFormat(this.createdAt, 'dddd, mmmm dS, yyyy, h:MM TT');
-	};*/
 	return books;
 };
