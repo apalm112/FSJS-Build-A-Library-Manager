@@ -3,21 +3,32 @@ module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.createTable('loans', {
 			id: {
-				autoIncrement: true,
+				type: Sequelize.INTEGER,
 				primaryKey: true,
-				type: Sequelize.INTEGER
+				autoIncrement: true,
+				allowNull: false,
 			},
 			book_id: {
-				type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'books',
+					key: 'id',
+				}
 			},
 			patron_id: {
-				type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'patrons',
+					key: 'id',
+				}
 			},
 			loaned_on: {
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				allowNull: false,
 			},
 			return_by: {
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				allowNull: false,
 			},
 			returned_on: {
 				type: Sequelize.DATE

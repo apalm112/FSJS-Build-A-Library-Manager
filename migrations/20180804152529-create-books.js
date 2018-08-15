@@ -3,18 +3,22 @@ module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.createTable('books', {
 			id: {
+				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
-				type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
 			},
 			title: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			author: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			genre: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			first_published: {
 				type: Sequelize.INTEGER
