@@ -13,31 +13,34 @@ router.get('/all_loans', (req, res, next) => {
 		Loan.findAll({
 			include: [
 				{
-					model: Patron,
-					// as: 'id',
+					all: true
 				}
 			]
 		}).then(loans => {
 			res.render('all_loans', {
 				loans: loans,
-				patrons: Patron,
-				books: Book,
 				title: 'Loans'
 			});
-			console.log('-----------------------------------------------> ', loans[0]);
+			// console.log('HERE-----------------------------------------------> ', loans[0].dataValues.book.dataValues.title);
 		});
 });
 
 router.get('/new_loan', (req, res, next) => {
 	// This route displays the 'new_loan' page & allows a user to add a new loan to the library.db
-	Loan.findAll().then(loans => {
+	Loan.findAll({
+		include: [
+			{
+				all: true
+			}
+		]
+	}).then(loans => {
 		res.render('new_loan', {
-			loans: Loan.build(req.body),
-			books: Book.build(req.body),
-			patrons: Patron.build(req.body),
+			loans: loans,
+			// books: Book.build(req.body),
+			// patrons: Patron.build(req.body),
 			title: 'New Loan',
 		});
-		console.log('/NEW_LOAN-----------------------------------------------> ', books);
+		// console.log('/NEW_LOAN-----------------------------------------------> ', books);
 	});
 });
 

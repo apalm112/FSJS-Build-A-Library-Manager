@@ -9,9 +9,10 @@ block content
 		p
 			label(for='book_id') Book ID
 			select#book_id(name='book_id')
-				if books
-					each book in books
-						option(name='book_id', value= book.id) #{book.id}
+				if loans
+					each loan, index in loans
+						//- if loan[index].dataValues.b
+						option(name='book_id') #{loans[index].dataValues.book.dataValues.title}
 				//- option(value='2') Harry Potter and the Chamber of Secrets
 				//- option(value='3') Harry Potter and the Prisoner of Azkaban
 				//- option(value='4') Harry Potter and the Goblet of Fire
@@ -29,9 +30,9 @@ block content
 		p
 			label(for='patronId') Patron ID
 			select#patron_id
-				if patrons
-					each patron in patrons
-						option(name='patron_id', value= patron.id) #{patron.id}
+				if loans
+					each loan, index in loans
+						option(name='patron_id') #{loans[index].dataValues.patron.dataValues.first_name}
 				//- option(value='2') Dave McFarland
 				//- option(value='3') Alena Holligan
 				//- option(value='4') Michael Poley

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true,
 			allowNull: false,
 		},
-/*		book_id: {
+		book_id: {
 			type: DataTypes.INTEGER,
 			validate: {
 				notEmpty: {
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'Patron ID is required!'
 				}
 			}
-		},*/
+		},
 		loaned_on: {
 			type: DataTypes.DATE,
 			validate: {
@@ -51,8 +51,8 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	loans.associate = function(models) {
 		// associations can be defined here
-		loans.hasOne(models.patrons, { foreignKey : 'id' });
-		loans.hasOne(models.books, { foreignKey : 'id' });
+		loans.belongsTo(models.patrons, { foreignKey : 'id' });
+		loans.belongsTo(models.books, { foreignKey : 'id' });
 		// loans.belongsTo(models.books);
 		//  ,  { as: 'book_id' }
 		// loans.belongsTo(models.patrons, { as: 'patron_id' });
