@@ -11,7 +11,8 @@ block content
 			select#book_id(name='book_id')
 				if loans
 					each loan, index in loans
-						//- if loan[index].dataValues.b
+						//- TODO: currently this displays data from all books w/ loans.  Needs to display data from ONLY books that are available to be checked out.  Same for the Patron select below.
+						//- if loans[index].dataValues.loan.dataValues.loaned_on !== checkedOut
 						option(name='book_id') #{loans[index].dataValues.book.dataValues.title}
 				//- option(value='2') Harry Potter and the Chamber of Secrets
 				//- option(value='3') Harry Potter and the Prisoner of Azkaban
@@ -32,15 +33,15 @@ block content
 			select#patron_id
 				if loans
 					each loan, index in loans
-						option(name='patron_id') #{loans[index].dataValues.patron.dataValues.first_name}
+						option(name='patron_id') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}
 				//- option(value='2') Dave McFarland
 				//- option(value='3') Alena Holligan
 				//- option(value='4') Michael Poley
 		p
 			label(for='loaned_on') Loaned on:
-			input#loaned_on(type='text', name='loaned_on', value='Sun May 22 2016 17:00:00 GMT-0700 (PDT)')
+			input#loaned_on(type='text', name='loaned_on', value= today)
 		p
 			label(for='return_by') Return by:
-			input#return_by(type='text', name='return_by', value='Sun May 29 2016 17:00:00 GMT-0700 (PDT)')
+			input#return_by(type='text', name='return_by', value= returnBy)
 		p
 			input(type='submit', value='Create New Loan')

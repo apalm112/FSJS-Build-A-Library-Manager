@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Sequelize = require('sequelize');
+const dayjs = require('dayjs');
 
 const Book = require('../models').books;
 const Patron = require('../models').patrons;
@@ -27,6 +28,9 @@ router.get('/all_loans', (req, res, next) => {
 
 router.get('/new_loan', (req, res, next) => {
 	// This route displays the 'new_loan' page & allows a user to add a new loan to the library.db
+	const today = dayjs().format().slice(0,10);
+	const dateLibrary = dayjs().add(7, 'day').add(1, 'month');
+	const returnBy = dateLibrary.format().slice(0,10);
 	Loan.findAll({
 		include: [
 			{
@@ -36,11 +40,15 @@ router.get('/new_loan', (req, res, next) => {
 	}).then(loans => {
 		res.render('new_loan', {
 			loans: loans,
+			today: today,
+			returnBy: returnBy,
 			// books: Book.build(req.body),
 			// patrons: Patron.build(req.body),
 			title: 'New Loan',
 		});
-		// console.log('/NEW_LOAN-----------------------------------------------> ', books);
+		console.log(today);
+		console.log(returnBy);
+		// console.log('/NEW_LOAN-----------------------------------------------> ', loans[0].dataValues.book.dataValues.title );
 	});
 });
 
@@ -62,6 +70,7 @@ router.post('/new_loan', (req, res, next) => {
 	}).catch((error) => {
 		res.sendStatus(500, error);
 	});
+	console.log(today);
 });
 
 router.get('/overdue_loans', (req, res, next) => {
