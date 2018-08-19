@@ -25,9 +25,9 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='book_detail') #{loans[index].dataValues.book.dataValues.title}
+							a(href='book_detail') #{loans[index].book.dataValues.title}
 						td
-							a(href='patron_detail') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}
+							a(href='patron_detail') #{loans[index].patron.first_name} #{loans[index].patron.last_name}
 						td #{loan.loaned_on}
 						td #{loan.return_by}
 						td #{loan.returned_on}

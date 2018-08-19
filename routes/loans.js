@@ -22,7 +22,11 @@ router.get('/all_loans', (req, res, next) => {
 				loans: loans,
 				title: 'Loans'
 			});
-			// console.log('HERE-----------------------------------------------> ', loans[0].dataValues.book.dataValues.title);
+			// console.log('loans[0] HERE-----------------------------------------------> ', loans[0].patron.dataValues.last_name);
+			// .dataValues.book.dataValues.title
+			// console.log('loans[0].book HERE-----------------------------------------------> ', loans[0].book.dataValues.title);
+			// console.log('WORKIN OVER HERE-----------------------------------------------> ', loans[3].patron.first_name, loans[3].patron.last_name, ' + ', loans[3].patron);
+
 		});
 });
 
