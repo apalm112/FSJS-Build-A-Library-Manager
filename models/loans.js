@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
 		loans.hasMany(models.patrons, { foreignKey : 'id' });
 		loans.hasMany(models.books, { foreignKey : 'id' });
 		// loans.belongsTo(models.books);
-		//  ,  { as: 'book_id' }
+		// ,  { as: 'book_id' }
 		// loans.belongsTo(models.patrons, { as: 'patron_id' });
 	};
 	return loans;
