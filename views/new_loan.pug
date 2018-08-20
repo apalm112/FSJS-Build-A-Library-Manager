@@ -11,6 +11,7 @@ block content
 			select#book_id(name='book_id')
 				if books
 					each book, index in books
+<<<<<<< Updated upstream
 						option(name='book_id') #{books[index].dataValues.title}
 						//- This line only works w/ Loan.findAll() AND only load book titles that have loans, NOT ALL BOOK TITLES! #{loans[index].dataValues.book.dataValues.title}
 		p
@@ -19,6 +20,40 @@ block content
 				if loans
 					each loan, index in loans
 						//- option(name='patron_id') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}
+=======
+						//- TODO: currently this displays data from all books w/ loans.  Needs to display data from ONLY books that are available to be checked out.  Same for the Patron select below.
+						//- if loans[index].dataValues.loan.dataValues.loaned_on !== 
+						option(name='book_id') 						#{books[index].title}
+
+						//- #{books[index].dataValues.loans[index]}
+						//- #{loans[index].dataValues.book.dataValues.id}
+						//- #{loans[index].dataValues.book.dataValues.title} 
+						//- loan.id:#{loans[index].dataValues.book_id} 
+				//- option(value='2') Harry Potter and the Chamber of Secrets
+				//- option(value='3') Harry Potter and the Prisoner of Azkaban
+				//- option(value='4') Harry Potter and the Goblet of Fire
+				//- option(value='5') Harry Potter and the Order of the Phoenix
+				//- option(value='6') Harry Potter and the Half-Blood Prince
+				//- option(value='7') Harry Potter and the Deathly Hallows
+				//- option(value='8') A Brief History of Time
+				//- option(value='9') The Universe in a Nutshell
+				//- option(value='10') Frankenstein
+				//- option(value='11') The Martian
+				//- option(value='12') Ready Player One
+				//- option(value='13') Armada
+				//- option(value='14') Pride and Prejudice
+				//- option(value='15') Emma
+		p
+			label(for='patronId') Patron ID
+			select#patron_id(name='patron_id')
+				if patrons
+					each patron, index in patrons
+						option(name='patron_id') #{patrons[index].id} | #{patrons[index].first_name} #{patrons[index].last_name}
+							//- loan.id:#{loans[index].dataValues.patron_id}
+				//- option(value='2') Dave McFarland
+				//- option(value='3') Alena Holligan
+				//- option(value='4') Michael Poley
+>>>>>>> Stashed changes
 		p
 			label(for='loaned_on') Loaned on:
 			input#loaned_on(type='text', name='loaned_on', value= loaned_on)

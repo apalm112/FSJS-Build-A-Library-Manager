@@ -56,11 +56,16 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	loans.associate = function(models) {
 		// associations can be defined here
+<<<<<<< Updated upstream
 		loans.hasMany(models.patrons, { foreignKey : 'id' });
 		loans.hasMany(models.books, { foreignKey : 'id' });
 		// loans.belongsTo(models.books);
 		// ,  { as: 'book_id' }
 		// loans.belongsTo(models.patrons, { as: 'patron_id' });
+=======
+		loans.belongsTo(models.books);  // Will add books_id to loans
+		loans.belongsTo(models.patrons);
+>>>>>>> Stashed changes
 	};
 	return loans;
 };

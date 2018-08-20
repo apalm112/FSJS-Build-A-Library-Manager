@@ -13,6 +13,7 @@ router.get('/all_loans', (req, res, next) => {
 	Loan.findAll({
 		include: [
 			{
+<<<<<<< Updated upstream
 				model: Book
 			},
 			{
@@ -21,12 +22,23 @@ router.get('/all_loans', (req, res, next) => {
 		]
 	}).then(loans => {
 		// console.log(JSON.stringify(loans));
+=======
+				all: true
+			}
+		]
+	}).then(loans => {
+>>>>>>> Stashed changes
 		res.render('all_loans', {
 			loans: loans,
 			title: 'Loans'
 		});
+<<<<<<< Updated upstream
 		console.log('ALL FUCKING LOANS HERBERT HERE-----------------------------------------------> ', loans[0].dataValues.books[0].title, loans[0].dataValues.books[0].author, loans[0].dataValues.books[0].genre);
 		//
+=======
+		console.log('HERE-----------------------------------------------> ', loans);
+		//loans[0].dataValues.book.dataValues.title
+>>>>>>> Stashed changes
 	});
 });
 
