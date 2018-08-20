@@ -10,49 +10,45 @@ const db = require('../models').index;
 
 router.get('/all_loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
-	// Loan.findAll().then(loans => {
-		Loan.findAll({
-			include: [
-				{
-					all: true
-				}
-			]
-		}).then(loans => {
-			res.render('all_loans', {
-				loans: loans,
-				title: 'Loans'
-			});
-			// console.log('loans[0] HERE-----------------------------------------------> ', loans[0].patron.dataValues.last_name);
-			// .dataValues.book.dataValues.title
-			// console.log('loans[0].book HERE-----------------------------------------------> ', loans[0].book.dataValues.title);
-			// console.log('WORKIN OVER HERE-----------------------------------------------> ', loans[3].patron.first_name, loans[3].patron.last_name, ' + ', loans[3].patron);
-
+	Loan.findAll({
+		include: [
+			{
+				model: Book
+			},
+			{
+				model: Patron
+			}
+		]
+	}).then(loans => {
+		// console.log(JSON.stringify(loans));
+		res.render('all_loans', {
+			loans: loans,
+			title: 'Loans'
 		});
+		console.log('ALL FUCKING LOANS HERBERT HERE-----------------------------------------------> ', loans[0].dataValues.books[0].title, loans[0].dataValues.books[0].author, loans[0].dataValues.books[0].genre);
+		//
+	});
 });
 
 router.get('/new_loan', (req, res, next) => {
 	// This route displays the 'new_loan' page & allows a user to add a new loan to the library.db
 	const today = dayjs().format().slice(0,10);
-	const dateLibrary = dayjs().add(7, 'day').add(1, 'month');
+	const dateLibrary = dayjs().add(7, 'day');
 	const returnBy = dateLibrary.format().slice(0,10);
-	Loan.findAll({
+	Book.findAll({
 		include: [
 			{
-				all: true
+				model: Patron
 			}
 		]
-	}).then(loans => {
+	}).then(books => {
 		res.render('new_loan', {
-			loans: loans,
+			books: books,
 			today: today,
 			returnBy: returnBy,
-			// books: Book.build(req.body),
-			// patrons: Patron.build(req.body),
 			title: 'New Loan',
 		});
-		console.log(today);
-		console.log(returnBy);
-		// console.log('/NEW_LOAN-----------------------------------------------> ', loans[0].dataValues.book.dataValues.title );
+		console.log('WORKING OVER HERE-----------------------------------------------> ', books[0]);
 	});
 });
 
