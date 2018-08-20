@@ -47,7 +47,12 @@ module.exports = (sequelize, DataTypes) => {
 			isDate: true,
 		},
 	}, {
-		timestamps: false
+		timestamps: false,
+		/* Foreign keys:
+			By default the foreign key for a `belongsTo` relation will be generated from the target model name and the target primary key name.
+			The default casing is camelCase however if the source model is configured with `underscored: true` the foreignKey will be snake_case.
+			*/
+		underscored: true
 	});
 	loans.associate = function(models) {
 		// associations can be defined here

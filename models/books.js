@@ -37,12 +37,12 @@ module.exports = (sequelize, DataTypes) => {
 			isDate: true,
 		},
 	}, {
-		timestamps: false
+		timestamps: false,
+		underscored: true
 	});
 	books.associate = function(models) {
 		// associations can be defined here
-		// books.hasOne(models.loans);
-		books.hasMany(models.patrons);
+		books.hasOne(models.loans, {foreignKey: 'id', targetKey: 'book_id'});
 	};
 	return books;
 };

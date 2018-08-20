@@ -24,7 +24,7 @@ module.exports = {
 			},
 			loaned_on: {
 				type: Sequelize.DATE,
-				allowNull: false,
+				// allowNull: false,
 			},
 			return_by: {
 				type: Sequelize.DATE,

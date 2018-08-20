@@ -6,7 +6,7 @@ const dayjs = require('dayjs');
 const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
-const db = require('../models').index;
+const Op = Sequelize.Op;
 
 router.get('/all_loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
@@ -32,34 +32,52 @@ router.get('/all_loans', (req, res, next) => {
 
 router.get('/new_loan', (req, res, next) => {
 	// This route displays the 'new_loan' page & allows a user to add a new loan to the library.db
-	const today = dayjs().format().slice(0,10);
-	const dateLibrary = dayjs().add(7, 'day');
-	const returnBy = dateLibrary.format().slice(0,10);
-	Book.findAll({
+	const loaned_on = dayjs().format().slice(0,10);
+	const dateLibrary = dayjs().add(1, 'week');
+	const return_by = dateLibrary.format().slice(0,10);
+
+	Loan.findAll({
 		include: [
 			{
-				model: Patron
+				model: Book,
+				// as: 'books'
+			},
+			{
+				model: Patron,
+				// as: 'patrons'
 			}
 		]
-	}).then(books => {
-		res.render('new_loan', {
-			books: books,
-			today: today,
-			returnBy: returnBy,
-			title: 'New Loan',
+	})
+		.then((loans, Book, patrons) => {
+
+
+			// console.log('/NEW_LOAN book_id... -----------------> ', loans[0].book_id);
+			// console.log('/NEW_LOAN Book... -----------------> ', Book);
+			// console.log('/NEW_LOAN book... -----------------> ', books[0].book.title);
+			// console.log('/NEW_LOAN patron... -----------------> ',  loans[0].patron.first_name, loans[0].patron.last_name);
+
+
+			res.render('new_loan', {
+				loans: loans,
+				books: Book,
+				patrons: patrons,
+				loaned_on: loaned_on,
+				return_by: return_by,
+				title: 'New Loan',
+			});
 		});
-		console.log('WORKING OVER HERE-----------------------------------------------> ', books[0]);
-	});
+	// console.log('/NEW_LOAN patrons[0].loans.book_id-----------------------------------------------> ', patrons[0].loans[0].book_id,  patrons[0].loans[0].loaned_on);
 });
 
 router.post('/new_loan', (req, res, next) => {
 	/* POST, create a new loan in the library.db */
 	Loan.create(req.body).then(() => {
 		res.redirect('/loans/all_loans');
+		console.log(req.body);
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('new_loan', {
-				loan: Loan.build(req.body),
+				loans: Loan.build(req.body),
 				title: 'New Loan',
 				button_text: 'Create New Loan',
 				errors: error.errors
@@ -69,8 +87,8 @@ router.post('/new_loan', (req, res, next) => {
 		}
 	}).catch((error) => {
 		res.sendStatus(500, error);
+		console.log(req.body);
 	});
-	console.log(today);
 });
 
 router.get('/overdue_loans', (req, res, next) => {
@@ -78,6 +96,23 @@ router.get('/overdue_loans', (req, res, next) => {
 });
 
 router.get('/checked_loans', (req, res, next) => {
+/////////////////////////////////////////////////////////
+// This code block COULD HELP Out w/ this route.
+	Loan.findAll({ include: [{ all: true,	nested: true }]})
+		.then((loans) => {
+			console.log('/NEW_LOAN book_id... -----------------> ',loans[0].book_id);
+			console.log('/NEW_LOAN patron_id... -----------------> ', loans[0].patron_id);
+			console.log('/NEW_LOAN book... -----------------> ', loans[0].book.title);
+			console.log('/NEW_LOAN patron... -----------------> ',  loans[0].patron.first_name, loans[0].patron.last_name);
+
+			res.render('new_loan', {
+				loans: loans,
+				loaned_on: loaned_on,
+				return_by: return_by,
+				title: 'New Loan',
+			});
+		});
+///////////////////////////////////////////////
 	res.render('checked_loans');
 });
 

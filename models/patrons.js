@@ -72,10 +72,12 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	}, {
 		timestamps: false,
+		underscored: true
 	});
 	patrons.associate = function(models) {
 		// associations can be defined here
-		// patrons.hasMany(models.loans);
+		patrons.hasMany(models.loans);
+		// , { as: 'patron_id' }
 	};
 	return patrons;
 };
