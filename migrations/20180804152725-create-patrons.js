@@ -3,36 +3,34 @@ module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.createTable('patrons', {
 			id: {
-				allowNull: false,
-				autoIncrement: true,
+				type: Sequelize.INTEGER,
 				primaryKey: true,
-				type: Sequelize.INTEGER
+				autoIncrement: true,
+				allowNull: false,
 			},
 			first_name: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			last_name: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			address: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			email: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			library_id: {
-				type: Sequelize.STRING
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			zip_code: {
-				type: Sequelize.INTEGER
-			},
-			createdAt: {
+				type: Sequelize.INTEGER,
 				allowNull: false,
-				type: Sequelize.DATE
-			},
-			updatedAt: {
-				allowNull: false,
-				type: Sequelize.DATE
 			}
 		});
 	},

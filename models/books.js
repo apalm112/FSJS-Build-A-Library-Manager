@@ -2,10 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const books = sequelize.define('books', {
-		id: {
-			type: DataTypes.INTEGER,
-			primaryKey: true,
-		},
 		title: {
 			type: DataTypes.STRING,
 			validate: {
@@ -32,10 +28,15 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		first_published: {
 			type: DataTypes.INTEGER,
+			isDate: true,
 		},
+	}, {
+		timestamps: false,
+		underscored: true
 	});
 	books.associate = function(models) {
 		// associations can be defined here
+		books.hasMany(models.loans, { foreignKey: 'book_id'	});
 	};
 	return books;
 };
