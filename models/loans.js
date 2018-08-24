@@ -1,26 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
 	const loans = sequelize.define('loans', {
-		id: {
-			type: DataTypes.INTEGER,
-			primaryKey: true,
-		},
-		book_id: {
-			type: DataTypes.INTEGER,
-			validate: {
-				notEmpty: {
-					msg: 'Book ID is required!'
-				}
-			}
-		},
-		patron_id: {
-			type: DataTypes.INTEGER,
-			validate: {
-				notEmpty: {
-					msg: 'Patron ID is required!'
-				}
-			}
-		},
 		loaned_on: {
 			type: DataTypes.DATE,
 			validate: {
@@ -40,7 +20,10 @@ module.exports = (sequelize, DataTypes) => {
 		returned_on: {
 			type: DataTypes.DATE,
 		},
-	}, {});
+	}, {
+		timestamps: false,
+		underscored: true
+	});
 	loans.associate = function(models) {
 		// associations can be defined here
 	};
