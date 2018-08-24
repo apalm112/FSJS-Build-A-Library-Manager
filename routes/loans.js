@@ -106,8 +106,36 @@ router.get('/checked_loans', (req, res, next) => {
 	res.render('checked_loans');
 });
 
-router.get('/return_book', (req, res, next) => {
-	res.render('return_book');
+router.get('/return_book/:id/', (req, res, next) => {
+/*
+	where: {
+		id: req.params.id
+	}
+	*/
+	const returned_on = dayjs().format().slice(0,10);
+
+	Loan.findById(req.params.id).then(loans => {
+
+		if(loans) {
+			console.log('HERE---------------------------------------->: ', loans.dataValues.book_id);
+
+			Patron.findById(req.params.id).then( (patrons) => {
+				Book.findById(req.params.id).then( (books) => {
+					res.render('return_book', {
+						loans: loans,
+						returned_on: returned_on,
+						books: books,
+						patrons: patrons,
+					});
+					console.log('HERE---------------------------------------->: ', books.title);
+				});
+			});
+		} else {
+			res.sendStatus(404);
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
 });
 
 
