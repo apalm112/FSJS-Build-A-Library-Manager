@@ -13,7 +13,6 @@ router.get('/all_loans', (req, res, next) => {
 	Loan.findAll({
 		include: [
 			{
-<<<<<<< Updated upstream
 				model: Book
 			},
 			{
@@ -22,23 +21,11 @@ router.get('/all_loans', (req, res, next) => {
 		]
 	}).then(loans => {
 		// console.log(JSON.stringify(loans));
-=======
-				all: true
-			}
-		]
-	}).then(loans => {
->>>>>>> Stashed changes
 		res.render('all_loans', {
 			loans: loans,
 			title: 'Loans'
 		});
-<<<<<<< Updated upstream
-		console.log('ALL FUCKING LOANS HERBERT HERE-----------------------------------------------> ', loans[0].dataValues.books[0].title, loans[0].dataValues.books[0].author, loans[0].dataValues.books[0].genre);
-		//
-=======
-		console.log('HERE-----------------------------------------------> ', loans);
-		//loans[0].dataValues.book.dataValues.title
->>>>>>> Stashed changes
+		// console.log('ALL FUCKING LOANS HERBERT HERE -----------------------------------------------> ', loans[0]);
 	});
 });
 
@@ -48,37 +35,17 @@ router.get('/new_loan', (req, res, next) => {
 	const dateLibrary = dayjs().add(1, 'week');
 	const return_by = dateLibrary.format().slice(0,10);
 
-	Loan.findAll({
-		include: [
-			{
-				model: Book,
-				// as: 'books'
-			},
-			{
-				model: Patron,
-				// as: 'patrons'
-			}
-		]
-	})
-		.then((loans, Book, patrons) => {
-
-
-			// console.log('/NEW_LOAN book_id... -----------------> ', loans[0].book_id);
-			// console.log('/NEW_LOAN Book... -----------------> ', Book);
-			// console.log('/NEW_LOAN book... -----------------> ', books[0].book.title);
-			// console.log('/NEW_LOAN patron... -----------------> ',  loans[0].patron.first_name, loans[0].patron.last_name);
-
-
+	Patron.findAll().then( (patrons) => {
+		Book.findAll().then( (books) => {
 			res.render('new_loan', {
-				loans: loans,
-				books: Book,
+				books: books,
 				patrons: patrons,
 				loaned_on: loaned_on,
 				return_by: return_by,
 				title: 'New Loan',
 			});
 		});
-	// console.log('/NEW_LOAN patrons[0].loans.book_id-----------------------------------------------> ', patrons[0].loans[0].book_id,  patrons[0].loans[0].loaned_on);
+	});
 });
 
 router.post('/new_loan', (req, res, next) => {
@@ -124,6 +91,9 @@ router.get('/checked_loans', (req, res, next) => {
 				title: 'New Loan',
 			});
 		});
+		where: {
+			id: req.params.id
+		}
 ///////////////////////////////////////////////
 	res.render('checked_loans');
 });
