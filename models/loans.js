@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const loans = sequelize.define('loans', {
-/*		id: {
+		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
@@ -23,28 +23,34 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'Patron ID is required!'
 				}
 			}
-		},*/
+		},
 		loaned_on: {
-			type: DataTypes.DATE,
+			type: DataTypes.DATEONLY,
 			validate: {
 				notEmpty: {
 					msg: 'Loan Date is required!'
 				},
-				isDate: true,
+				isDate: {
+					msg: 'Loaned On Date Must Be a Valid Date'
+				}
 			}
 		},
 		return_by: {
-			type: DataTypes.DATE,
+			type: DataTypes.DATEONLY,
 			validate: {
 				notEmpty: {
 					msg: 'Return By Date is required!'
 				},
-				isDate: true,
+				isDate:  {
+					msg: 'Return By Date Must Be a Valid Date'
+				}
 			}
 		},
 		returned_on: {
-			type: DataTypes.DATE,
-			isDate: true,
+			type: DataTypes.DATEONLY,
+			isDate:  {
+				msg: 'Returned On Date Must Be a Valid Date'
+			}
 		},
 	}, {
 		timestamps: false,

@@ -23,15 +23,15 @@ module.exports = {
 				}
 			},
 			loaned_on: {
-				type: Sequelize.DATE,
+				type: Sequelize.DATEONLY,
 				// allowNull: false,
 			},
 			return_by: {
-				type: Sequelize.DATE,
+				type: Sequelize.DATEONLY,
 				allowNull: false,
 			},
 			returned_on: {
-				type: Sequelize.DATE
+				type: Sequelize.DATEONLY
 			}
 		});
 	},

@@ -11,14 +11,15 @@ block content
 			select#book_id(name='book_id')
 				if books
 					each book, index in books
-						option(name='book_id') #{books[index].dataValues.id} #{books[index].dataValues.title}
-						//- This line only works w/ Loan.findAll() AND only load book titles that have loans, NOT ALL BOOK TITLES!  #{books[index].dataValues.title} 
+						option(name='book_id') #{books[index].dataValues.id} 
+						//- #{books[index].dataValues.title}
 		p
 			label(for='patronId') Patron ID
-			select#patron_id
+			select#patron_id(name='patron_id')
 				if patrons
 					each patron, index in patrons
-						option(name='patron_id') #{patrons[index].dataValues.id} #{patrons[index].dataValues.first_name} #{patrons[index].dataValues.last_name}
+						option(name='patron_id') #{patrons[index].dataValues.id} 
+						//- #{patrons[index].dataValues.first_name} #{patrons[index].dataValues.last_name}
 		p
 			label(for='loaned_on') Loaned on:
 			input#loaned_on(type='text', name='loaned_on', value= loaned_on)

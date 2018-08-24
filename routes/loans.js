@@ -50,23 +50,31 @@ router.get('/new_loan', (req, res, next) => {
 
 router.post('/new_loan', (req, res, next) => {
 	/* POST, create a new loan in the library.db */
+	const loaned_on = dayjs().format().slice(0,10);
+	const dateLibrary = dayjs().add(1, 'week');
+	const return_by = dateLibrary.format().slice(0,10);
+
 	Loan.create(req.body).then(() => {
 		res.redirect('/loans/all_loans');
-		console.log(req.body);
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
-			res.render('new_loan', {
-				loans: Loan.build(req.body),
-				title: 'New Loan',
-				button_text: 'Create New Loan',
-				errors: error.errors
+			Patron.findAll().then( (patrons) => {
+				Book.findAll().then( (books) => {
+					res.render('new_loan', {
+						books: books,
+						patrons: patrons,
+						loaned_on: loaned_on,
+						return_by: return_by,
+						title: 'New Loan',
+						errors: error.errors
+					});
+				});
 			});
 		} else {
 			throw error;
 		}
 	}).catch((error) => {
 		res.sendStatus(500, error);
-		console.log(req.body);
 	});
 });
 
