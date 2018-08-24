@@ -115,19 +115,20 @@ router.get('/return_book/:id/', (req, res, next) => {
 	const returned_on = dayjs().format().slice(0,10);
 
 	Loan.findById(req.params.id).then(loans => {
+		// console.log('HERE---------------------------------------->: ', loans.book_id, loans.patron_id, loans.id, loans);
 
 		if(loans) {
-			console.log('HERE---------------------------------------->: ', loans.dataValues.book_id);
+			// console.log('HERE---------------------------------------->: ', loans.dataValues.book_id);
 
-			Patron.findById(req.params.id).then( (patrons) => {
-				Book.findById(req.params.id).then( (books) => {
+			Patron.findById(loans.patron_id).then( (patrons) => {
+				Book.findById(loans.book_id).then( (books) => {
 					res.render('return_book', {
 						loans: loans,
-						returned_on: returned_on,
-						books: books,
 						patrons: patrons,
+						books: books,
+						returned_on: returned_on,
 					});
-					console.log('HERE---------------------------------------->: ', books.title);
+					// console.log('HERE---------------------------------------->: ', loans.dataValues.book_id, loans.patron_id, patrons.id, loans);
 				});
 			});
 		} else {
