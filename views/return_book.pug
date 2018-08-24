@@ -14,7 +14,7 @@ block content
   p
     strong Return By: 
     | #{loans.return_by}
-  form
+  form(action='/' + loan.id, method='post')
     p
       label(for='returned_on') Returned on:
       input#returned_on(type='text', value= returned_on)

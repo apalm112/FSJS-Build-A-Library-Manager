@@ -113,13 +113,8 @@ router.get('/return_book/:id/', (req, res, next) => {
 	}
 	*/
 	const returned_on = dayjs().format().slice(0,10);
-
 	Loan.findById(req.params.id).then(loans => {
-		// console.log('HERE---------------------------------------->: ', loans.book_id, loans.patron_id, loans.id, loans);
-
 		if(loans) {
-			// console.log('HERE---------------------------------------->: ', loans.dataValues.book_id);
-
 			Patron.findById(loans.patron_id).then( (patrons) => {
 				Book.findById(loans.book_id).then( (books) => {
 					res.render('return_book', {
@@ -128,16 +123,49 @@ router.get('/return_book/:id/', (req, res, next) => {
 						books: books,
 						returned_on: returned_on,
 					});
-					// console.log('HERE---------------------------------------->: ', loans.dataValues.book_id, loans.patron_id, patrons.id, loans);
 				});
 			});
 		} else {
 			res.sendStatus(404);
 		}
 	}).catch((error) => {
+		if(error.name === 'SequelizeValidationError') {
+			res.render('return_book', {
+				loan: Loan.build(req.body),
+				errors: error.errors
+			});
+		} else {
+			throw error;
+		}
+	}).catch((error) => {
 		res.sendStatus(500, error);
 	});
 });
+
+router.delete('/return_book/:id', (req, res) => {
+	Loan.findById(req.params.id).then((loan) => {
+		if(loan) {
+			return loan.destroy();
+		} else {
+			res.send(404);
+		}
+	}).then(() => {
+		res.redirect('/all_loans');
+	}).catch((error) => {
+		res.sendStatus(500);
+	});
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
