@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const loans = sequelize.define('loans', {
-		id: {
+/*		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'Patron ID is required!'
 				}
 			}
-		},
+		},*/
 		loaned_on: {
 			type: DataTypes.DATE,
 			validate: {
@@ -56,16 +56,12 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	loans.associate = function(models) {
 		// associations can be defined here
-<<<<<<< Updated upstream
-		loans.hasMany(models.patrons, { foreignKey : 'id' });
-		loans.hasMany(models.books, { foreignKey : 'id' });
-		// loans.belongsTo(models.books);
-		// ,  { as: 'book_id' }
-		// loans.belongsTo(models.patrons, { as: 'patron_id' });
-=======
-		loans.belongsTo(models.books);  // Will add books_id to loans
-		loans.belongsTo(models.patrons);
->>>>>>> Stashed changes
+		// loans.hasMany(models.patrons, { foreignKey : 'id' });
+		// loans.hasMany(models.books, { foreignKey : 'id' });
+		loans.belongsTo(models.books, { foreignKey : 'book_id' });
+		// ,  { as: 'book_id' }  , { foreignKey : 'book_id' }
+		loans.belongsTo(models.patrons, { foreignKey: 'patron_id' });
+		//  , { foreignKey: 'patron_id' }
 	};
 	return loans;
 };

@@ -2,12 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
 	const patrons = sequelize.define('patrons', {
-		id: {
-			type: DataTypes.INTEGER,
-			primaryKey: true,
-			allowNull: false,
-			autoIncrement: true,
-		},
 		first_name: {
 			type: DataTypes.STRING,
 			validate: {
@@ -76,8 +70,8 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	patrons.associate = function(models) {
 		// associations can be defined here
-		patrons.hasMany(models.loans);
-		// , { as: 'patron_id' }
+		patrons.hasMany(models.loans, { foreignKey: 'patron_id' });
+		patrons.hasMany(models.books, { foreignKey: 'id' });
 	};
 	return patrons;
 };
