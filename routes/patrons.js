@@ -13,6 +13,7 @@ router.get('/all_patrons', (req, res, next) => {
 			patrons: patrons,
 			title: 'Patrons',
 		});
+		console.log(patrons[0].dataValues.id);
 	});
 });
 
@@ -46,9 +47,40 @@ router.post('/new_patron', (req, res, next) => {
 	});
 });
 
-router.get('/patron_detail', (req, res, next) => {
-	res.render('patron_detail');
+router.get('/patron_detail/:id/edit', (req, res) => {
+	Patron.findById(req.params.id).then((patrons) => {
+		Loan.findAll({ where: { patron_id: [req.params.id] } }).then((loans) => {
+			Book.findAll().then((books) => {
+				if(patrons, loans, books) {
+					res.render('patron_detail', {
+						patron: patrons,
+						loans: loans,
+						books: books,
+					});
+					console.log(req.params.id);
+				} else {
+					res.sendStatus(404);
+				}
+			}).catch((error) => {
+				res.sendStatus(500, error);
+			});
+		});
+	});
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = router;

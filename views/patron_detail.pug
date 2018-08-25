@@ -2,7 +2,7 @@ extends index
 
 block content
 	body
-		h1 Patron: Andy Labrowski
+		h1 Patron: #{patron.first_name} #{patron.last_name}
 		form
 			include partials/patron_form
 		h2 Loan History
@@ -18,21 +18,14 @@ block content
 			tbody
 				tr
 					td
-						a(href='book_detail') Harry Potter and the Goblet of Fire
-					td
-						a(href='patron_detail') Andrew Chalkley
-					td 2015-12-11
-					td 2015-12-18
-					td
-					td
-						a.button(href='return_book') Return Book
-				tr
-					td
-						a(href='book_detail') A Brief History of Time
-					td
-						a(href='patron_detail') Andrew Chalkley
-					td 2015-12-12
-					td 2015-12-19
-					td
-					td
-						a.button(href='return_book') Return Book
+						if books
+							a(href='book_detail' + loans.id) #{books.title}
+						td
+							if patron
+								a(href='patron_detail') #{patron.first_name} #{patron.last_name}
+							if loans
+						td #{loans.loaned_on}
+						td #{loans.return_by}
+						td #{loans.returned_on}
+						td
+							a.button(href='return_book' + loans.id) Return Book
