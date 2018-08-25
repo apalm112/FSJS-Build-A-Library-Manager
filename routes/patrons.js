@@ -50,14 +50,18 @@ router.post('/new_patron', (req, res, next) => {
 router.get('/patron_detail/:id/edit', (req, res) => {
 	Patron.findById(req.params.id).then((patrons) => {
 		Loan.findAll({ where: { patron_id: [req.params.id] } }).then((loans) => {
-			Book.findAll().then((books) => {
+
+			let findAllBookIds = loans.map( (curr, idx, loan) => loan[idx].book_id );
+
+			Book.findAll({ where: { id: [findAllBookIds] } }).then((books) => {
 				if(patrons, loans, books) {
 					res.render('patron_detail', {
 						patron: patrons,
 						loans: loans,
 						books: books,
 					});
-					console.log(req.params.id);
+					console.log(req.params, '-----------------------',  findAllBookIds, books[1].title);
+					// console.log(JSON.stringify(findAllBookIds));
 				} else {
 					res.sendStatus(404);
 				}
