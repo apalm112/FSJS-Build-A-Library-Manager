@@ -9,16 +9,17 @@ table
 			th Returned on
 			th Action
 	tbody
-		tr
-			td
-				a(href='javascript:window.location.reload(true)') #{book.title}
-				//- a(href='book_detail' + book.id) #{book.title}
-			td
-				a(href='/patrons/patron_detail') Patron Name Here 
-				//- #{book.book_id to get patron_id to get patron_name}  #{patron.first_name} #{patron.last_name} 
-			td 2015-12-12
-			td 2015-12-19
-			td
-			td
-				//- if checked_out
-				a.button(href='return_book') Return Book
+		if loans
+			each loan, index in loans
+				tr
+					td
+						a(href='javascript:window.location.reload(true)') #{book.title}
+					td
+						a(href='../../../patrons/patron_detail/' + patrons[index].dataValues.id + '/edit') #{patrons[index].dataValues.first_name} #{patrons[index].dataValues.last_name}
+					td #{loans[index].dataValues.loaned_on}
+					td #{loans[index].dataValues.return_by}
+					td #{loans[index].dataValues.returned_on}
+					td
+						if loans[index].dataValues.loaned_on !== null
+							if loans[index].dataValues.returned_on === null						
+								a.button(href='return_book' + loans.id) Return Book
