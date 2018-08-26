@@ -8,6 +8,8 @@ const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 const Op = Sequelize.Op;
 
+const today = dayjs().format().slice(0,10);
+
 router.get('/all_loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
 	Loan.findAll({
@@ -79,9 +81,10 @@ router.post('/new_loan', (req, res, next) => {
 });
 
 router.get('/overdue_loans', (req, res, next) => {
-	const today = dayjs().format().slice(0,10);
+	// const today = dayjs().format().slice(0,10);
 	Loan.findAll({
 		where: {
+			// This code cheking for overdue loans may need some tweaking, it is Not showing all of the overdue loans.
 			return_by: {
 				[Op.lt]: [today],
 			},
@@ -110,28 +113,44 @@ router.get('/overdue_loans', (req, res, next) => {
 });
 
 router.get('/checked_loans', (req, res, next) => {
-/////////////////////////////////////////////////////////
 // This code block COULD HELP Out w/ this route.
-	Loan.findAll({ include: [{ all: true,	nested: true }]})
+	Loan.findAll({
+		where: {
+		// This code cheking for overdue loans NEEDS tweaking, it is Not showing all of the overdue loans. ONLY DISPLAYS 6 / 10 LOANS.
+		return_by: {
+			[Op.gt]: [today],
+		},
+		returned_on: null,
+	},
+		include: [{ all: true,	nested: true }]})
 		.then((loans) => {
-			console.log('/NEW_LOAN book_id... -----------------> ',loans[0].book_id);
-			console.log('/NEW_LOAN patron_id... -----------------> ', loans[0].patron_id);
-			console.log('/NEW_LOAN book... -----------------> ', loans[0].book.title);
-			console.log('/NEW_LOAN patron... -----------------> ',  loans[0].patron.first_name, loans[0].patron.last_name);
+			console.log('/CHECKED OUT book_id... -----------------> ',loans[5].book_id);
+			console.log('/CHECKED OUT patron_id... -----------------> ', loans[5].patron_id);
+			console.log('/CHECKED OUT book... -----------------> ', loans[5].book.title);
+			console.log('/CHECKED OUT patron... -----------------> ',  loans[5].patron.first_name, loans[5].patron.last_name);
 
-			res.render('new_loan', {
+			// console.log(JSON.stringify(loans));
+
+			let whoppuh = loans.map( (curr, idx, loan) => {
+				return loan[idx].returned_on;
+			});
+			console.log(whoppuh);
+
+			res.render('checked_loans', {
 				loans: loans,
-				loaned_on: loaned_on,
-				return_by: return_by,
-				title: 'New Loan',
+				title: 'Checked Out Books',
 			});
 		});
-		where: {
-			id: req.params.id
-		}
-///////////////////////////////////////////////
-	res.render('checked_loans');
 });
+
+
+
+
+
+
+
+
+
 
 router.get('/return_book', (req, res, next) => {
 	res.render('return_book');
