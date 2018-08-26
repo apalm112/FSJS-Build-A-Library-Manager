@@ -79,7 +79,34 @@ router.post('/new_loan', (req, res, next) => {
 });
 
 router.get('/overdue_loans', (req, res, next) => {
-	res.render('overdue_loans');
+	const today = dayjs().format().slice(0,10);
+	Loan.findAll({
+		where: {
+			return_by: {
+				[Op.lt]: [today],
+			},
+			returned_on: null,
+		},
+		include: [{
+			model: Patron,
+			attributes: [ 'id', 'first_name', 'last_name' ],
+		}],
+	}).then( (loans) => {
+		let findAllBookIds = loans.map(( curr, idx, loan) => {
+			return loan[idx].book_id;
+		});
+
+		Book.findAll({ where: { id: [findAllBookIds] } }).then((books) => {
+			res.render('overdue_loans', {
+				loans: loans,
+				books: books,
+				title: 'Overdue Loans'
+			});
+			// console.log(JSON.stringify(books));
+			// console.log('-----------------', books[0].title );
+			// console.log(findAllBookIds);
+		});
+	});
 });
 
 router.get('/checked_loans', (req, res, next) => {
