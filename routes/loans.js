@@ -9,6 +9,7 @@ const Loan = require('../models').loans;
 const Op = Sequelize.Op;
 
 const today = dayjs().format().slice(0,10);
+const returned_on = dayjs().format().slice(0,10);
 
 router.get('/all_loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
@@ -27,7 +28,7 @@ router.get('/all_loans', (req, res, next) => {
 			loans: loans,
 			title: 'Loans'
 		});
-		// console.log('ALL FUCKING LOANS HERBERT HERE -----------------------------------------------> ', loans[0]);
+		// console.log('-----------------------------------------------> ', loans[0]);
 	});
 });
 
@@ -126,13 +127,74 @@ router.get('/checked_loans', (req, res, next) => {
 		});
 });
 
-
-
-
-
-router.get('/return_book', (req, res, next) => {
-	res.render('return_book');
+router.get('/return_book/:id', (req, res, next) => {
+	// const returned_on = dayjs().format().slice(0,10);
+	Loan.findById(req.params.id).then(loans => {
+		Patron.findById(loans.patron_id).then( (patrons) => {
+			Book.findById(loans.book_id).then( (books) => {
+				// console.log('GET---------------------------', req.body);
+				res.render('return_book', {
+					loans: loans,
+					patrons: patrons,
+					books: books,
+					returned_on: returned_on,
+					title:  'Patron: Return Book',
+				});
+			}).catch((error) => {
+				res.sendStatus(500, error);
+			});
+		});
+	});
 });
+
+router.put('/:id', (req, res, next) => {
+	Loan.findById(req.params.id).then((loans) => {
+		if(loans) {
+			// console.log('/:id---------------------------', req, loans);
+			return loans.update(req.body);
+		} else {
+			res.send(404);
+		}
+	}).then((loans) => {
+		res.redirect('/loans/all_loans');
+	}).catch((error) => {
+		if(error.name === 'SequelizeValidationError') {
+
+			Loan.findById(req.params.id).then(loans => {
+				Patron.findById(loans.patron_id).then( (patrons) => {
+					Book.findById(loans.book_id).then( (books) => {
+						res.render('return_book', {
+							loans: loans,
+							patrons: patrons,
+							books: books,
+							returned_on: returned_on,
+							title:  'Patron: Return Book',
+							errors: error.errors,
+						});
+					});
+				});
+			});
+		} else {
+			throw error;
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
+});
+			/*const loan = Loan.build(req.body);
+			res.render('return_book', {
+				loans: loan,
+				title: 'Book:' + loan.title,
+				button_text: 'Update',
+				errors: error.errors
+			});
+		} else {
+			throw error;
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);*/
+
+
 
 
 

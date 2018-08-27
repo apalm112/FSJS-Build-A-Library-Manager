@@ -1,22 +1,25 @@
 extends index
 
 block content
-  h1 Patron: Return Book
+	
+  include errors
+	
+  h1 #{title}
   p
     strong Book Title: 
-    | Harry Potter and the Goblet of Fire
+      |  #{books.title}
   p
     strong Loaned By: 
-    | Andrew Chalkley
+    | #{patrons.first_name} #{patrons.last_name}
   p
     strong Loaned On: 
-    | 2015-12-11
+    | #{loans.loaned_on}
   p
     strong Return By: 
-    | 2015-12-18
-  form
+    | #{loans.return_by}
+  form(action='/loans/' + loans.id + '?_method=PUT', method='post')
     p
       label(for='returned_on') Returned on:
-      input#returned_on(type='text', value='2020-10-10')
+      input#returned_on(type='text', name='returned_on', value= returned_on)
     p
       input(type='submit', value='Return Book')
