@@ -84,7 +84,7 @@ router.get('/overdue_loans', (req, res, next) => {
 	// const today = dayjs().format().slice(0,10);
 	Loan.findAll({
 		where: {
-			// This code cheking for overdue loans may need some tweaking, it is Not showing all of the overdue loans.
+			// This code cheking for overdue loans may need some tweaking, it is Not showing all of the overdue loans.  Could be to a dulplicate loan in the loans table.  Problem may be solved w/ removing/not allowing dulplicate loans.
 			return_by: {
 				[Op.lt]: [today],
 			},
@@ -125,11 +125,6 @@ router.get('/checked_loans', (req, res, next) => {
 			});
 		});
 });
-
-
-
-
-
 
 
 
