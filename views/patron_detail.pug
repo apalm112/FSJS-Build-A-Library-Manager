@@ -2,8 +2,11 @@ extends index
 
 block content
 	body
+		
+		include errors
+		
 		h1 Patron: #{patron.first_name} #{patron.last_name}
-		form(action='/patrons/all_patrons', method='put')
+		form(action='/patrons/' + patron.id + '?_method=PUT', method='post')
 			include partials/patron_form
 		h2 Loan History
 		table
@@ -19,11 +22,13 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='book_detail') #{books[index].title}
+							a(href='../../../../books/book_detail/' + books[index].id + '/edit') #{books[index].title}
 						td
 							a(href='javascript:window.location.reload(true)') #{patron.first_name} #{patron.last_name}
 						td #{loans[index].dataValues.loaned_on}
 						td #{loans[index].dataValues.return_by}
 						td #{loans[index].dataValues.returned_on}
 						td
-							a.button(href='../../../loans/return_book/' + loans[index].id) Return Book
+							if loans[index].dataValues.loaned_on !== null
+								if loans[index].dataValues.returned_on === null			
+									a.button(href='../../../loans/return_book/' + loans[index].id) Return Book

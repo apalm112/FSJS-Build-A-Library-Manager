@@ -1,4 +1,3 @@
-/*eslint-disable*/
 const express = require('express');
 const router = express.Router();
 const Sequelize = require('sequelize');
@@ -73,12 +72,34 @@ router.get('/patron_detail/:id/edit', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
 	Patron.findById(req.params.id).then((patrons) => {
-		console.log('---------------------------------', req.params.id);
-		console.log(req.body);
 		return patrons.update(req.body);
 	}).then((patrons) => {
-		res.redirect('patron_detail');
-	})
+		res.redirect('/patrons/all_patrons');
+	}).catch((error) => {
+		if(error.name === 'SequelizeValidationError') {
+			// Add code here
+			Patron.findById(req.params.id).then((patrons) => {
+				Loan.findAll({ where: { patron_id: [req.params.id] } }).then((loans) => {
+					// Maps over the loans object to get all book_id's in order to dispaly book titles on the patron_detail page.
+					let findAllBookIds = loans.map( (curr, idx, loan) => loan[idx].book_id );
+
+					Book.findAll({ where: { id: [findAllBookIds] } }).then((books) => {
+						res.render('patron_detail', {
+							patron: patrons,
+							loans: loans,
+							books: books,
+							button_text: 'Update',
+							errors: error.errors,
+						});
+					});
+				});
+			});
+		} else {
+			res.sendStatus(404, error);
+		}
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
 });
 
 
