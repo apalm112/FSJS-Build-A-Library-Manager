@@ -8,6 +8,8 @@ const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 const Op = Sequelize.Op;
 
+const today = dayjs().format().slice(0,10);
+
 router.get('/all_loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
 	Loan.findAll({
@@ -79,31 +81,49 @@ router.post('/new_loan', (req, res, next) => {
 });
 
 router.get('/overdue_loans', (req, res, next) => {
-	res.render('overdue_loans');
+	// const today = dayjs().format().slice(0,10);
+	Loan.findAll({
+		where: {
+			// This code cheking for overdue loans may need some tweaking, it is Not showing all of the overdue loans.  Could be to a dulplicate loan in the loans table.  Problem may be solved w/ removing/not allowing dulplicate loans.
+			return_by: {
+				[Op.lt]: [today],
+			},
+			returned_on: null,
+		},
+		include: [{
+			model: Patron,
+			attributes: [ 'id', 'first_name', 'last_name' ],
+		}],
+	}).then( (loans) => {
+		let findAllBookIds = loans.map(( curr, idx, loan) => {
+			return loan[idx].book_id;
+		});
+
+		Book.findAll({ where: { id: [findAllBookIds] } }).then((books) => {
+			res.render('overdue_loans', {
+				loans: loans,
+				books: books,
+				title: 'Overdue Loans'
+			});
+			// console.log(JSON.stringify(books));
+			// console.log('-----------------', books[0].title );
+			// console.log(findAllBookIds);
+		});
+	});
 });
 
 router.get('/checked_loans', (req, res, next) => {
-/////////////////////////////////////////////////////////
-// This code block COULD HELP Out w/ this route.
-	Loan.findAll({ include: [{ all: true,	nested: true }]})
+	Loan.findAll({
+		where: {
+			returned_on: null,
+		},
+		include: [{ all: true,	nested: true }]})
 		.then((loans) => {
-			console.log('/NEW_LOAN book_id... -----------------> ',loans[0].book_id);
-			console.log('/NEW_LOAN patron_id... -----------------> ', loans[0].patron_id);
-			console.log('/NEW_LOAN book... -----------------> ', loans[0].book.title);
-			console.log('/NEW_LOAN patron... -----------------> ',  loans[0].patron.first_name, loans[0].patron.last_name);
-
-			res.render('new_loan', {
+			res.render('checked_loans', {
 				loans: loans,
-				loaned_on: loaned_on,
-				return_by: return_by,
-				title: 'New Loan',
+				title: 'Checked Out Books',
 			});
 		});
-		where: {
-			id: req.params.id
-		}
-///////////////////////////////////////////////
-	res.render('checked_loans');
 });
 
 router.get('/return_book/:id/', (req, res, next) => {

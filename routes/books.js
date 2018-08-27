@@ -76,17 +76,27 @@ router.get('/book_detail/:id/edit', (req, res, next) => {
 	// Get the book_id of the book clicked on in all_books
 	Book.findById(req.params.id).then(books => {
 		// get that books data & render it to book_detail
-		if(books) {
-			res.render('book_detail', {
-				book: books,
-				title: 'Book: ' + books.title,
-				button_text: 'Update',
+		Loan.findAll({ where: { book_id: [req.params.id] } }).then((loans) => {
+			// Maps over the loans object to get all book_id's in order to dispaly book titles on the patron_detail page.
+			let findAllPatronIds = loans.map( (curr, idx, loan) => loan[idx].patron_id );
+
+			Patron.findAll({ where: { id: [findAllPatronIds] } }).then((patrons) => {
+				if(books) {
+					res.render('book_detail', {
+						book: books,
+						loans: loans,
+						patrons: patrons,
+						title: 'Book: ' + books.title,
+						button_text: 'Update',
+					});
+					console.log(books.title, patrons[0].dataValues.first_name, findAllPatronIds, loans[0].dataValues.loaned_on);
+				} else {
+					res.sendStatus(404);
+				}
+			}).catch((error) => {
+				res.sendStatus(500, error);
 			});
-		} else {
-			res.sendStatus(404);
-		}
-	}).catch((error) => {
-		res.sendStatus(500, error);
+		});
 	});
 });
 

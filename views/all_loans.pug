@@ -25,13 +25,15 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='book_detail') #{loans[index].dataValues.book.title}
+							a(href='../books/book_detail/' + loans[index].dataValues.book.dataValues.id + '/edit') #{loans[index].dataValues.book.title}
 						td
-							a(href='patron_detail') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}	
+							a(href='../patrons/patron_detail/' + loans[index].dataValues.patron.dataValues.id + '/edit') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}	
 							//- These two lines below Only work With NO 'db:migrate' having been activated in the CLI.
 							//- #{loans[index].patron.first_name} #{loans[index].patron.last_name}
 						td #{loan.loaned_on}
 						td #{loan.return_by}
 						td #{loan.returned_on}
 						td
-							a.button(href='return_book/' + loan.id) Return Book
+							if loans[index].dataValues.loaned_on !== null
+								if loans[index].dataValues.returned_on === null						
+									a.button(href='return_book' + loans.id) Return Book
