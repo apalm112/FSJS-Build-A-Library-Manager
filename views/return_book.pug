@@ -1,6 +1,9 @@
 extends index
 
 block content
+	
+  include errors
+	
   h1 #{title}
   p
     strong Book Title: 
@@ -14,9 +17,9 @@ block content
   p
     strong Return By: 
     | #{loans.return_by}
-  form(action='/return_book/', method='put')
+  form(action='/loans/' + loans.id + '?_method=PUT', method='post')
     p
       label(for='returned_on') Returned on:
-      input#returned_on(type='text', value= returned_on)
+      input#returned_on(type='text', name='returned_on', value= returned_on)
     p
       input(type='submit', value='Return Book')
