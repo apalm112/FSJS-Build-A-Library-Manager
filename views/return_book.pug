@@ -1,7 +1,7 @@
 extends index
 
 block content
-  h1 Patron: Return Book
+  h1 #{title}
   p
     strong Book Title: 
       |  #{books.title}
@@ -14,7 +14,7 @@ block content
   p
     strong Return By: 
     | #{loans.return_by}
-  form(action='/' + loan.id, method='post')
+  form(action='/return_book/', method='put')
     p
       label(for='returned_on') Returned on:
       input#returned_on(type='text', value= returned_on)

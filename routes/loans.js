@@ -27,7 +27,7 @@ router.get('/all_loans', (req, res, next) => {
 			loans: loans,
 			title: 'Loans'
 		});
-		// console.log('ALL FUCKING LOANS HERBERT HERE -----------------------------------------------> ', loans[0]);
+		console.log('-----------------------------------------------> ', loans[0]);
 	});
 });
 
@@ -126,28 +126,21 @@ router.get('/checked_loans', (req, res, next) => {
 		});
 });
 
-router.get('/return_book/:id/', (req, res, next) => {
-/*
-	where: {
-		id: req.params.id
-	}
-	*/
+router.get('/return_book/:id', (req, res) => {
 	const returned_on = dayjs().format().slice(0,10);
+
 	Loan.findById(req.params.id).then(loans => {
-		if(loans) {
-			Patron.findById(loans.patron_id).then( (patrons) => {
-				Book.findById(loans.book_id).then( (books) => {
-					res.render('return_book', {
-						loans: loans,
-						patrons: patrons,
-						books: books,
-						returned_on: returned_on,
-					});
+		Patron.findById(loans.patron_id).then( (patrons) => {
+			Book.findById(loans.book_id).then( (books) => {
+				res.render('return_book', {
+					loans: loans,
+					patrons: patrons,
+					books: books,
+					returned_on: returned_on,
+					title:  'Patron: Return Book',
 				});
 			});
-		} else {
-			res.sendStatus(404);
-		}
+		});
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('return_book', {
@@ -162,17 +155,29 @@ router.get('/return_book/:id/', (req, res, next) => {
 	});
 });
 
-router.delete('/return_book/:id', (req, res) => {
+/*  Just wrote this block.
+router.get('/return_book/:id', (req, res) => {
+	Loan.findById(req.params.id).then((loans) => {
+
+		res.render('/return_book/:id', {
+			loans: loans,
+			title:  'Patron: Return Book',
+		});
+	});
+});*/
+
+
+router.put('/return_book/:id', (req, res) => {
 	Loan.findById(req.params.id).then((loan) => {
 		if(loan) {
-			return loan.destroy();
+			return loan.update();
 		} else {
 			res.send(404);
 		}
 	}).then(() => {
 		res.redirect('/all_loans');
 	}).catch((error) => {
-		res.sendStatus(500);
+		res.sendStatus(500, error);
 	});
 });
 
