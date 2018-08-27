@@ -23,7 +23,7 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='/books/book_detail/' + loans[index].book_id + '/edit') #{loans[index].book.title}
+							a(href='/book_detail/' + loans[index].book_id + '/edit') #{loans[index].book.title}
 						td #{loans[index].book.author}
 						td #{loans[index].book.genre}
 						td #{loans[index].book.first_published}

@@ -109,6 +109,8 @@ router.get('/overdue_loans', (req, res, next) => {
 			// console.log(JSON.stringify(books));
 			// console.log('-----------------', books[0].title );
 			// console.log(findAllBookIds);
+		}).catch((error) => {
+			res.sendStatus(500, error);
 		});
 	});
 });
