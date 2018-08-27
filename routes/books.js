@@ -43,22 +43,17 @@ router.get('/all_books', (req, res, next) => {
 			books: books,
 			title: 'Books'
 		});
-		// console.log('router.get ---> /all_books --> books[0].title: ', books[0].title);
-		// console.log('router.get: books.title: ************************************** ', books.title);
-		// 			#{book.id.title}
 	});
 });
 
 router.get('/overdue_books', (req, res, next) => {
 	/* Render the overdue books page. */
-	//- 'books?filter=overdue'
 	//- SELECT * from BOOKS WHERE BOOK.ID in LOANS WHERE return_by [Op.gt]: today
 	const today = (new Date()).toISOString().slice(0,10);
 	Loan.findAll({
 		where: {
 			return_by: {
 				[Op.gt]: today,
-			//	id: true,
 			}
 		}
 	}).then(loans => {
@@ -66,8 +61,6 @@ router.get('/overdue_books', (req, res, next) => {
 			loans: loans,
 			title: 'Overdue Books'
 		});
-		// console.log('router.get ---> /overdue_books --> loans[0].title: ', loans);
-		// console.log('router.get: loans.title: ************************************** ', loans.title);
 	});
 });
 
@@ -89,7 +82,6 @@ router.get('/book_detail/:id/edit', (req, res, next) => {
 						title: 'Book: ' + books.title,
 						button_text: 'Update',
 					});
-					console.log(books.title, patrons[0].dataValues.first_name, findAllPatronIds, loans[0].dataValues.loaned_on);
 				} else {
 					res.sendStatus(404);
 				}
@@ -115,13 +107,22 @@ router.put('/:id', (req, res, next) => {
 		res.redirect('/books/all_books');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
-			const book = Book.build(req.body);
-			// book.id = req.params.id;
-			res.render('book_detail', {
-				book: book,
-				title: 'Book:' + book.title,
-				button_text: 'Update',
-				errors: error.errors
+
+			Book.findById(req.params.id).then(book => {
+				Loan.findAll({ where: { book_id: [req.params.id] } }).then((loans) => {
+					let findAllPatronIds = loans.map( (curr, idx, loan) => loan[idx].patron_id );
+					Patron.findAll({ where: { id: [findAllPatronIds] } }).then((patrons) => {
+
+						res.render('book_detail', {
+							book: book,
+							loans: loans,
+							patrons: patrons,
+							title: 'Book:' + book.title,
+							button_text: 'Update',
+							errors: error.errors
+						});
+					});
+				});
 			});
 		} else {
 			throw error;
@@ -130,6 +131,10 @@ router.put('/:id', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
+
+
+
+
 
 router.get('/checked_books', (req, res, next) => {
 	res.render('checked_books');
