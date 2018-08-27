@@ -181,21 +181,5 @@ router.put('/:id', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
-			/*const loan = Loan.build(req.body);
-			res.render('return_book', {
-				loans: loan,
-				title: 'Book:' + loan.title,
-				button_text: 'Update',
-				errors: error.errors
-			});
-		} else {
-			throw error;
-		}
-	}).catch((error) => {
-		res.sendStatus(500, error);*/
-
-
-
-
 
 module.exports = router;
