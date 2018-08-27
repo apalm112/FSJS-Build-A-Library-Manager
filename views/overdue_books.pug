@@ -19,24 +19,11 @@ block content
         th Genre
         th Year Released
     tbody
-      //- 'books?filter=overdue'
       if books
         each book in books
           tr
             td
-              a(href='book_detail') #{book.title}
+              a(href='../book_detail/' + book.id + '/edit') #{book.title}
             td #{book.author}
             td #{book.genre}
             td #{book.first_published}
-      //- tr
-      //-   td
-      //-     a(href='book_detail') A Brief History of Time
-      //-   td Stephen Hawking
-      //-   td Non Fiction
-      //-   td 1988
-      //- tr
-      //-   td
-      //-     a(href='book_detail') The Universe in a Nutshell
-      //-   td Stephen Hawking
-      //-   td Non Fiction
-      //-   td 2001
