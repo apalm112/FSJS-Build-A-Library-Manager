@@ -113,29 +113,12 @@ router.get('/overdue_loans', (req, res, next) => {
 });
 
 router.get('/checked_loans', (req, res, next) => {
-// This code block COULD HELP Out w/ this route.
 	Loan.findAll({
 		where: {
-		// This code cheking for overdue loans NEEDS tweaking, it is Not showing all of the overdue loans. ONLY DISPLAYS 6 / 10 LOANS.
-		return_by: {
-			[Op.gt]: [today],
+			returned_on: null,
 		},
-		returned_on: null,
-	},
 		include: [{ all: true,	nested: true }]})
 		.then((loans) => {
-			console.log('/CHECKED OUT book_id... -----------------> ',loans[5].book_id);
-			console.log('/CHECKED OUT patron_id... -----------------> ', loans[5].patron_id);
-			console.log('/CHECKED OUT book... -----------------> ', loans[5].book.title);
-			console.log('/CHECKED OUT patron... -----------------> ',  loans[5].patron.first_name, loans[5].patron.last_name);
-
-			// console.log(JSON.stringify(loans));
-
-			let whoppuh = loans.map( (curr, idx, loan) => {
-				return loan[idx].returned_on;
-			});
-			console.log(whoppuh);
-
 			res.render('checked_loans', {
 				loans: loans,
 				title: 'Checked Out Books',
