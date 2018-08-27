@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const dayjs = require('dayjs');
 
 const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
+
+const today = dayjs().format().slice(0,10);
+const returned_on = dayjs().format().slice(0,10);
 
 router.get('/new_book', (req, res, next) => {
 	/* Render the new book form. */
@@ -48,18 +52,27 @@ router.get('/all_books', (req, res, next) => {
 
 router.get('/overdue_books', (req, res, next) => {
 	/* Render the overdue books page. */
-	//- SELECT * from BOOKS WHERE BOOK.ID in LOANS WHERE return_by [Op.gt]: today
-	const today = (new Date()).toISOString().slice(0,10);
 	Loan.findAll({
 		where: {
 			return_by: {
-				[Op.gt]: today,
-			}
-		}
-	}).then(loans => {
-		res.render('overdue_books', {
-			loans: loans,
-			title: 'Overdue Books'
+				[Op.lt]: today,
+			},
+			returned_on: null,
+		},
+		include: [{
+			model: Patron,
+			attributes: [ 'id', 'first_name', 'last_name'],
+		}]
+	}).then((loans) => {
+		let findAllBookIds = loans.map((curr, idx, loan) => {
+			return loan[idx].book_id;
+		});
+		Book.findAll({ where: { id: [findAllBookIds] }}).then((books) => {
+			res.render('overdue_books', {
+				loans: loans,
+				books: books,
+				title: 'Overdue Books'
+			});
 		});
 	});
 });
@@ -137,8 +150,31 @@ router.put('/:id', (req, res, next) => {
 
 
 router.get('/checked_books', (req, res, next) => {
-	res.render('checked_books');
+	Loan.findAll({ where: {
+		returned_on: null,
+	},
+		include: [{ all: true, nested: true }]})
+		.then((loans) => {
+			res.render('checked_books', {
+				loans: loans,
+				title: 'Checked Out Books'
+			});
+			console.log(loans[0].book.dataValues.title);
+		});
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = router;
