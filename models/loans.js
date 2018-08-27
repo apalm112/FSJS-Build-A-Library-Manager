@@ -52,10 +52,10 @@ module.exports = (sequelize, DataTypes) => {
 				notEmpty: {
 					msg: 'Returned on Date Must Be Entered.'
 				},
+				isDate:  {
+					msg: 'Returned On Date Must Be a Valid Date'
+				}
 			},
-			isDate:  {
-				msg: 'Returned On Date Must Be a Valid Date'
-			}
 		},
 	}, {
 		timestamps: false,
