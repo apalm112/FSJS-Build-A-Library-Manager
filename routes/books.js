@@ -150,8 +150,31 @@ router.put('/:id', (req, res, next) => {
 
 
 router.get('/checked_books', (req, res, next) => {
-	res.render('checked_books');
+	Loan.findAll({ where: {
+		returned_on: null,
+	},
+		include: [{ all: true, nested: true }]})
+		.then((loans) => {
+			res.render('checked_books', {
+				loans: loans,
+				title: 'Checked Out Books'
+			});
+			console.log(loans[0].book.dataValues.title);
+		});
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = router;
