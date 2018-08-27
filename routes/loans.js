@@ -11,7 +11,7 @@ const Op = Sequelize.Op;
 const today = dayjs().format().slice(0,10);
 const returned_on = dayjs().format().slice(0,10);
 
-router.get('/all_loans', (req, res, next) => {
+router.get('/loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
 	Loan.findAll({
 		include: [
@@ -24,7 +24,7 @@ router.get('/all_loans', (req, res, next) => {
 		]
 	}).then(loans => {
 		// console.log(JSON.stringify(loans));
-		res.render('all_loans', {
+		res.render('loans', {
 			loans: loans,
 			title: 'Loans'
 		});
@@ -58,7 +58,7 @@ router.post('/new_loan', (req, res, next) => {
 	const return_by = dateLibrary.format().slice(0,10);
 
 	Loan.create(req.body).then(() => {
-		res.redirect('/loans/all_loans');
+		res.redirect('/loans');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			Patron.findAll().then( (patrons) => {
@@ -156,7 +156,7 @@ router.put('/:id', (req, res, next) => {
 			res.send(404);
 		}
 	}).then((loans) => {
-		res.redirect('/loans/all_loans');
+		res.redirect('/loans');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 

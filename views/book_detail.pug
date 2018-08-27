@@ -2,7 +2,7 @@ extends index
 
 block content
 	
-	include errors
+	include partials/errors
 	
 	h1= title
 	form(action='/books/' + book.id + '?_method=PUT', method='post')

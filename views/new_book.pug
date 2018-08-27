@@ -3,7 +3,7 @@ extends index
 block content
   h1= title
 
-  include errors
+  include partials/errors
 
-  form(action='/books/new_book', method='post')
+  form(action='/new_book', method='post')
     include partials/book_form

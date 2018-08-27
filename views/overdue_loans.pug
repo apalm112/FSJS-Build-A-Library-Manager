@@ -6,7 +6,7 @@ block content
 		a.button(href='new_loan') Create New Loan
 	p
 		| Filters 
-		a(href='all_loans') All
+		a(href='loans') All
 		|	| 
 		a(href='overdue_loans') Overdue
 		|	| 
@@ -25,9 +25,9 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='../../books/book_detail/' + books[index].id + '/edit') #{books[index].title}
+							a(href='../../book_detail/' + books[index].id + '/edit') #{books[index].title}
 						td
-							a(href='../../patrons/patron_detail/' + loans[index].patron.dataValues.id + '/edit') #{loans[index].patron.dataValues.first_name} #{loans[index].patron.dataValues.last_name}
+							a(href='../../patron_detail/' + loans[index].patron.dataValues.id + '/edit') #{loans[index].patron.dataValues.first_name} #{loans[index].patron.dataValues.last_name}
 						td #{loan.loaned_on}
 						td #{loan.return_by}
 						td #{loan.returned_on}

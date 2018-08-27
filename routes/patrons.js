@@ -6,10 +6,10 @@ const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
-router.get('/all_patrons', (req, res, next) => {
+router.get('/patrons', (req, res, next) => {
 	// This route renders the 'all_patrons' page & lists all the patrons in the library.db file.
 	Patron.findAll().then(patrons => {
-		res.render('all_patrons', {
+		res.render('patrons', {
 			patrons: patrons,
 			title: 'Patrons',
 		});
@@ -29,7 +29,7 @@ router.post('/new_patron', (req, res, next) => {
 	/* POST, create a new patron in the library.db */
 	// This route checks for a valid new patron submission, adds the new patron to the patrons table & then redirects to the 'all_patrons' page with the newest patron included.
 	Patron.create(req.body).then(() => {
-		res.redirect('/patrons/all_patrons');
+		res.redirect('/patrons');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('new_patron', {
@@ -74,7 +74,7 @@ router.put('/:id', (req, res, next) => {
 	Patron.findById(req.params.id).then((patrons) => {
 		return patrons.update(req.body);
 	}).then((patrons) => {
-		res.redirect('/patrons/all_patrons');
+		res.redirect('/patrons');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			// Add code here
@@ -101,18 +101,5 @@ router.put('/:id', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

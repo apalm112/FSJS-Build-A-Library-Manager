@@ -3,9 +3,9 @@ extends index
 block content
 	h1= title
 	
-	include errors
+	include partials/errors
 	
-	form(action='/loans/new_loan', method='post')
+	form(action='/new_loan', method='post')
 		p
 			label(for='book_id') Book ID
 			select#book_id(name='book_id')
