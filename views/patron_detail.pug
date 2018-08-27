@@ -29,4 +29,6 @@ block content
 						td #{loans[index].dataValues.return_by}
 						td #{loans[index].dataValues.returned_on}
 						td
-							a.button(href='../../../loans/return_book/' + loans[index].id) Return Book
+							if loans[index].dataValues.loaned_on !== null
+								if loans[index].dataValues.returned_on === null			
+									a.button(href='../../../loans/return_book/' + loans[index].id) Return Book
