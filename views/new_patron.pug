@@ -1,0 +1,9 @@
+extends index
+
+block content
+	h1= title
+	
+	include errors
+	
+	form(action='/new_patron', method='post')
+		include partials/patron_form

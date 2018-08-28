@@ -1,0 +1,28 @@
+extends index
+
+block content
+	h1= title
+	
+	include errors
+	
+	form(action='/new_loan', method='post')
+		p
+			label(for='book_id') Book ID
+			select#book_id(name='book_id')
+				if books
+					each book, index in books
+						option(name='book_id') #{books[index].dataValues.title}
+		p
+			label(for='patronId') Patron ID
+			select#patron_id(name='patron_id')
+				if patrons
+					each patron, index in patrons
+						option(name='patron_id') #{patrons[index].dataValues.first_name} #{patrons[index].dataValues.last_name}
+		p
+			label(for='loaned_on') Loaned on:
+			input#loaned_on(type='text', name='loaned_on', value= loaned_on)
+		p
+			label(for='return_by') Return by:
+			input#return_by(type='text', name='return_by', value= return_by)
+		p
+			input(type='submit', value='Create New Loan')

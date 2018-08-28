@@ -1,0 +1,34 @@
+extends index
+
+block content
+	body
+		
+		include errors
+		
+		h1 Patron: #{patron.first_name} #{patron.last_name}
+		form(action='/patron_detail/' + patron.id + '?_method=PUT', method='post')
+			include partials/patron_form
+		h2 Loan History
+		table
+			thead
+				tr
+					th Book
+					th Patron 
+					th Loaned on
+					th Return by 
+					th Returned on
+					th Action
+			tbody
+				each loan, index in loans
+					tr
+						td
+							a(href='../../../../book_detail/' + books[index].id + '/edit') #{books[index].title}
+						td
+							a(href='javascript:window.location.reload(true)') #{patron.first_name} #{patron.last_name}
+						td #{loans[index].dataValues.loaned_on}
+						td #{loans[index].dataValues.return_by}
+						td #{loans[index].dataValues.returned_on}
+						td
+							if loans[index].dataValues.loaned_on !== null
+								if loans[index].dataValues.returned_on === null			
+									a.button(href='../../../return_book/' + loans[index].id) Return Book

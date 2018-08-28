@@ -1,0 +1,25 @@
+h2 Loan History
+table
+	thead
+		tr
+			th Book
+			th Patron 
+			th Loaned on
+			th Return by 
+			th Returned on
+			th Action
+	tbody
+		if loans
+			each loan, index in loans
+				tr
+					td
+						a(href='javascript:window.location.reload(true)') #{book.title}
+					td
+						a(href='../../../patron_detail/' + patrons[index].dataValues.id + '/edit') #{patrons[index].dataValues.first_name} #{patrons[index].dataValues.last_name}
+					td #{loans[index].dataValues.loaned_on}
+					td #{loans[index].dataValues.return_by}
+					td #{loans[index].dataValues.returned_on}
+					td
+						if loans[index].dataValues.loaned_on !== null
+							if loans[index].dataValues.returned_on === null						
+								a.button(href='../../../../return_book/' + loans[index].id) Return Book

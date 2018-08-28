@@ -1,0 +1,29 @@
+extends index
+
+block content
+	h1= title
+	p
+		a.button(href='new_book') Create New Book
+	p
+		| Filters 
+		a(href='books') All
+		|	| 
+		a(href='overdue_books') Overdue
+		|	| 
+		a(href='checked_books') Checked Out
+	table
+		thead
+			tr
+				th Title
+				th Author
+				th Genre
+				th Year Released
+		tbody
+			if loans
+				each loan, index in loans
+					tr
+						td
+							a(href='/book_detail/' + loans[index].book_id + '/edit') #{loans[index].book.title}
+						td #{loans[index].book.author}
+						td #{loans[index].book.genre}
+						td #{loans[index].book.first_published}

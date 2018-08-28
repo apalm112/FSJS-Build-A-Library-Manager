@@ -1,0 +1,39 @@
+extends index
+
+block content
+	h1= title
+	p
+		a.button(href='new_loan') Create New Loan
+	p
+		| Filters 
+		a(href='loans') All
+		|	| 
+		a(href='overdue_loans') Overdue
+		|	| 
+		a(href='checked_loans') Checked Out
+	table
+		thead
+			tr
+				th Book
+				th Patron 
+				th Loaned on
+				th Return by 
+				th Returned on
+				th Action
+		tbody
+			if loans
+				each loan, index in loans
+					tr
+						td
+							a(href='../book_detail/' + loans[index].dataValues.book.dataValues.id + '/edit') #{loans[index].dataValues.book.title}
+						td
+							a(href='../patron_detail/' + loans[index].dataValues.patron.dataValues.id + '/edit') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}	
+							//- These two lines below Only work With NO 'db:migrate' having been activated in the CLI.
+							//- #{loans[index].patron.first_name} #{loans[index].patron.last_name}
+						td #{loan.loaned_on}
+						td #{loan.return_by}
+						td #{loan.returned_on}
+						td
+							if loans[index].dataValues.loaned_on !== null
+								if loans[index].dataValues.returned_on === null						
+									a.button(href='return_book/' + loans[index].id) Return Book
