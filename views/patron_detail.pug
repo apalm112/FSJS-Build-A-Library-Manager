@@ -22,7 +22,7 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='../../../../books/book_detail/' + books[index].id + '/edit') #{books[index].title}
+							a(href='../../../../book_detail/' + books[index].id + '/edit') #{books[index].title}
 						td
 							a(href='javascript:window.location.reload(true)') #{patron.first_name} #{patron.last_name}
 						td #{loans[index].dataValues.loaned_on}

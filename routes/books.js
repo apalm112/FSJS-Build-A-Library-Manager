@@ -23,7 +23,7 @@ router.get('/new_book', (req, res, next) => {
 router.post('/new_book', (req, res, next) => {
 	/* POST, create a new book in the library.db, validates the user input. */
 	Book.create(req.body).then(() => {
-		res.redirect('/books/all_books');
+		res.redirect('/books');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('new_book', {
@@ -40,10 +40,10 @@ router.post('/new_book', (req, res, next) => {
 	});
 });
 
-router.get('/all_books', (req, res, next) => {
-	/* Render the all_books page, listing all of the books in the database. */
+router.get('/books', (req, res, next) => {
+	/* Render the 'books' page, listing all of the books in the database. */
 	Book.findAll().then(books => {
-		res.render('all_books', {
+		res.render('books', {
 			books: books,
 			title: 'Books'
 		});
@@ -78,8 +78,8 @@ router.get('/overdue_books', (req, res, next) => {
 });
 
 router.get('/book_detail/:id/edit', (req, res, next) => {
-	// GET individual Book Details, when an individual book link is clicked on the `/books/all_books` page, the user is redirected by this route to the `/books/book_detail/:id/edit` page.
-	// Get the book_id of the book clicked on in all_books
+	// GET individual Book Details, when an individual book link is clicked on the `/books` page, the user is redirected by this route to the `/book_detail/:id/edit` page.
+	// Get the book_id of the book clicked on in books
 	Book.findById(req.params.id).then(books => {
 		// get that books data & render it to book_detail
 		Loan.findAll({ where: { book_id: [req.params.id] } }).then((loans) => {
@@ -117,7 +117,7 @@ router.put('/:id', (req, res, next) => {
 		}
 	// Once the update has happened, Then we can redirect to the individual article.
 	}).then((book) =>  {
-		res.redirect('/books/all_books');
+		res.redirect('/books');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 
