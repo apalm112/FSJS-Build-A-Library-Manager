@@ -6,7 +6,7 @@ block content
 		include errors
 		
 		h1 Patron: #{patron.first_name} #{patron.last_name}
-		form(action='/patrons/' + patron.id + '?_method=PUT', method='post')
+		form(action='/patron_detail/' + patron.id + '?_method=PUT', method='post')
 			include partials/patron_form
 		h2 Loan History
 		table
@@ -22,7 +22,7 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='../../../../books/book_detail/' + books[index].id + '/edit') #{books[index].title}
+							a(href='../../../../book_detail/' + books[index].id + '/edit') #{books[index].title}
 						td
 							a(href='javascript:window.location.reload(true)') #{patron.first_name} #{patron.last_name}
 						td #{loans[index].dataValues.loaned_on}
@@ -31,4 +31,4 @@ block content
 						td
 							if loans[index].dataValues.loaned_on !== null
 								if loans[index].dataValues.returned_on === null			
-									a.button(href='../../../loans/return_book/' + loans[index].id) Return Book
+									a.button(href='../../../return_book/' + loans[index].id) Return Book
