@@ -11,6 +11,10 @@ const Op = Sequelize.Op;
 const today = dayjs().format().slice(0,10);
 const returned_on = dayjs().format().slice(0,10);
 
+const loaned_on = dayjs().format().slice(0,10);
+const dateLibrary = dayjs().add(1, 'week');
+const return_by = dateLibrary.format().slice(0,10);
+
 router.get('/loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
 	Loan.findAll({
@@ -53,31 +57,52 @@ router.get('/new_loan', (req, res, next) => {
 
 router.post('/new_loan', (req, res, next) => {
 	/* POST, create a new loan in the library.db */
-	const loaned_on = dayjs().format().slice(0,10);
-	const dateLibrary = dayjs().add(1, 'week');
-	const return_by = dateLibrary.format().slice(0,10);
+	const titleToFindId = req.body.book_id;
 
-	Loan.create(req.body).then(() => {
-		res.redirect('/loans');
-	}).catch((error) => {
-		if(error.name === 'SequelizeValidationError') {
-			Patron.findAll().then( (patrons) => {
-				Book.findAll().then( (books) => {
-					res.render('new_loan', {
-						books: books,
-						patrons: patrons,
-						loaned_on: loaned_on,
-						return_by: return_by,
-						title: 'New Loan',
-						errors: error.errors
-					});
+	const getPatronId = req.body.patron_id;
+	const num = getPatronId.search(' ');
+	const getFirst_name = getPatronId.slice(0, num);
+	const getLast_name = getPatronId.slice(num+1);
+
+	// Take the selected title from the new loan form & find the corresponding book.id, then store that value in a variable.
+	Book.findAll({ where: { title: titleToFindId }}).then((book) => {
+		const newLoanBookId = book[0].dataValues.id;
+		Patron.findAll({
+			where: {
+				first_name: getFirst_name,
+				last_name: getLast_name
+			}}).then((patron) => {
+				const newPatronId = patron[0].dataValues.id;
+	/*
+			This code block needs to take the form select options data
+			Then build a new loan object w/ that data & pass it into Loan.create()
+	 */
+				req.body.book_id = newLoanBookId;
+				req.body.patron_id = newPatronId;
+
+				Loan.create(req.body).then(() => {
+					res.redirect('/loans');
+				}).catch((error) => {
+					if(error.name === 'SequelizeValidationError') {
+						Patron.findAll().then( (patrons) => {
+							Book.findAll().then( (books) => {
+								res.render('new_loan', {
+									books: books,
+									patrons: patrons,
+									loaned_on: loaned_on,
+									return_by: return_by,
+									title: 'New Loan',
+									errors: error.errors
+								});
+							});
+						});
+					} else {
+						throw error;
+					}
+				}).catch((error) => {
+					res.sendStatus(500, error);
 				});
 			});
-		} else {
-			throw error;
-		}
-	}).catch((error) => {
-		res.sendStatus(500, error);
 	});
 });
 
