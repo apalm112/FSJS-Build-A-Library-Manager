@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const Sequelize = require('sequelize');
 
 const Book = require('../models').books;
 const Patron = require('../models').patrons;
@@ -101,18 +100,5 @@ router.put('/patron_detail/:id', (req, res, next) => {
 		res.sendStatus(500, error);
 	});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

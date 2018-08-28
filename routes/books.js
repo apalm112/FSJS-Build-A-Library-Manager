@@ -8,9 +8,6 @@ const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
-const today = dayjs().format().slice(0,10);
-const returned_on = dayjs().format().slice(0,10);
-
 router.get('/new_book', (req, res, next) => {
 	/* Render the new book form. */
 	res.render('new_book', {
@@ -52,6 +49,7 @@ router.get('/books', (req, res, next) => {
 
 router.get('/overdue_books', (req, res, next) => {
 	/* Render the overdue books page. */
+	const today = dayjs().format().slice(0,10);
 	Loan.findAll({
 		where: {
 			return_by: {
@@ -115,7 +113,7 @@ router.put('/:id', (req, res, next) => {
 		} else {
 			res.sendStatus(404);
 		}
-	// Once the update has happened, Then we can redirect to the individual article.
+	// Once the update has happened, Then can redirect to the individual article.
 	}).then((book) =>  {
 		res.redirect('/books');
 	}).catch((error) => {
@@ -145,10 +143,6 @@ router.put('/:id', (req, res, next) => {
 	});
 });
 
-
-
-
-
 router.get('/checked_books', (req, res, next) => {
 	Loan.findAll({ where: {
 		returned_on: null,
@@ -159,22 +153,7 @@ router.get('/checked_books', (req, res, next) => {
 				loans: loans,
 				title: 'Checked Out Books'
 			});
-			console.log(loans[0].book.dataValues.title);
 		});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

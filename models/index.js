@@ -37,25 +37,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// Models/tables
-// This attaches all Sequelize models to a single db Object, source is from project link to `https://lorenstewart.me/2016/09/12/sequelize-table-associations-joins/`  I don't think is works, so commented out.
-/*db.patrons = require('../models/patrons.js')(sequelize, Sequelize);
-db.loans = require('../models/loans.js')(sequelize, Sequelize);
-db.books = require('../models/books.js')(sequelize, Sequelize);*/
-
-// Relations, Table Joins, Associations
-/* Example of how it works:
- 		sourceModel.hasOne(targetModel)
- 		Book.hasOne(Loan);
-		sourceModel.hasMany(targetModel)
-		targetModel.belongsTo(sourceTable)
-	*/
-/*db.loans.belongsTo(db.books);
-db.loans.belongsTo(db.patrons);
-db.books.hasOne(db.loans);
-db.patrons.hasMany(db.loans);*/
-
-
-
-
 module.exports = db;

@@ -67,12 +67,8 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	loans.associate = function(models) {
 		// associations can be defined here
-		// loans.hasMany(models.patrons, { foreignKey : 'id' });
-		// loans.hasMany(models.books, { foreignKey : 'id' });
 		loans.belongsTo(models.books, { foreignKey : 'book_id' });
-		// ,  { as: 'book_id' }  , { foreignKey : 'book_id' }
 		loans.belongsTo(models.patrons, { foreignKey: 'patron_id' });
-		//  , { foreignKey: 'patron_id' }
 	};
 	return loans;
 };

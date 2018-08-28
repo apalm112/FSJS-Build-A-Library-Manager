@@ -7,7 +7,6 @@ block content
 	table
 		thead
 			tr
-				th Patron ID
 				th Name 
 				th Address
 				th Email
@@ -17,7 +16,6 @@ block content
 			if patrons
 				each patron in patrons
 					tr
-						td #{patron.id}
 						td
 							a(href='patron_detail/' + patron.id + '/edit') #{patron.first_name} #{patron.last_name}
 						td #{patron.address}

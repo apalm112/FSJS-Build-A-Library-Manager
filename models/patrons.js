@@ -54,8 +54,6 @@ module.exports = (sequelize, DataTypes) => {
 		zip_code: {
 			type: DataTypes.INTEGER,
 			validate: {
-				// max: 6,  these two are Not working
-				// min: 5,
 				notEmpty: {
 					msg: 'Patron Zip Code is required!'
 				},

@@ -32,7 +32,6 @@ router.get('/loans', (req, res, next) => {
 			loans: loans,
 			title: 'Loans'
 		});
-		// console.log('-----------------------------------------------> ', loans[0]);
 	});
 });
 
@@ -73,10 +72,6 @@ router.post('/new_loan', (req, res, next) => {
 				last_name: getLast_name
 			}}).then((patron) => {
 				const newPatronId = patron[0].dataValues.id;
-	/*
-			This code block needs to take the form select options data
-			Then build a new loan object w/ that data & pass it into Loan.create()
-	 */
 				req.body.book_id = newLoanBookId;
 				req.body.patron_id = newPatronId;
 
@@ -153,11 +148,9 @@ router.get('/checked_loans', (req, res, next) => {
 });
 
 router.get('/return_book/:id', (req, res, next) => {
-	// const returned_on = dayjs().format().slice(0,10);
 	Loan.findById(req.params.id).then(loans => {
 		Patron.findById(loans.patron_id).then( (patrons) => {
 			Book.findById(loans.book_id).then( (books) => {
-				// console.log('GET---------------------------', req.body);
 				res.render('return_book', {
 					loans: loans,
 					patrons: patrons,
@@ -175,7 +168,6 @@ router.get('/return_book/:id', (req, res, next) => {
 router.put('/return_book/:id', (req, res, next) => {
 	Loan.findById(req.params.id).then((loans) => {
 		if(loans) {
-			// console.log('/:id---------------------------', req, loans);
 			return loans.update(req.body);
 		} else {
 			res.send(404);
