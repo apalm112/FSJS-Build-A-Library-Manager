@@ -6,10 +6,10 @@ const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
-router.get('/all_patrons', (req, res, next) => {
-	// This route renders the 'all_patrons' page & lists all the patrons in the library.db file.
+router.get('/patrons', (req, res, next) => {
+	// This route renders the 'patrons' page & lists all the patrons in the library.db file.
 	Patron.findAll().then(patrons => {
-		res.render('all_patrons', {
+		res.render('patrons', {
 			patrons: patrons,
 			title: 'Patrons',
 		});
@@ -27,9 +27,9 @@ router.get('/new_patron', (req, res, next) => {
 
 router.post('/new_patron', (req, res, next) => {
 	/* POST, create a new patron in the library.db */
-	// This route checks for a valid new patron submission, adds the new patron to the patrons table & then redirects to the 'all_patrons' page with the newest patron included.
+	// This route checks for a valid new patron submission, adds the new patron to the patrons table & then redirects to the 'patrons' page with the newest patron included.
 	Patron.create(req.body).then(() => {
-		res.redirect('/patrons/all_patrons');
+		res.redirect('/patrons');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 			res.render('new_patron', {
@@ -70,14 +70,14 @@ router.get('/patron_detail/:id/edit', (req, res, next) => {
 	});
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/patron_detail/:id', (req, res, next) => {
+	// Update a Patrons data in the patrons table.
 	Patron.findById(req.params.id).then((patrons) => {
 		return patrons.update(req.body);
 	}).then((patrons) => {
-		res.redirect('/patrons/all_patrons');
+		res.redirect('/patrons');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
-			// Add code here
 			Patron.findById(req.params.id).then((patrons) => {
 				Loan.findAll({ where: { patron_id: [req.params.id] } }).then((loans) => {
 					// Maps over the loans object to get all book_id's in order to dispaly book titles on the patron_detail page.

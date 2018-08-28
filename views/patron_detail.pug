@@ -6,7 +6,7 @@ block content
 		include errors
 		
 		h1 Patron: #{patron.first_name} #{patron.last_name}
-		form(action='/patrons/' + patron.id + '?_method=PUT', method='post')
+		form(action='/patron_detail/' + patron.id + '?_method=PUT', method='post')
 			include partials/patron_form
 		h2 Loan History
 		table
