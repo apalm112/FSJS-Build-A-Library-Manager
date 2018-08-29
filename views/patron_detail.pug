@@ -5,7 +5,7 @@ block content
 		
 		include errors
 		
-		h1 Patron: #{patron.first_name} #{patron.last_name}
+		h1 Patron: #{loans[0].dataValues.patron.dataValues.first_name} #{loans[0].dataValues.patron.dataValues.last_name}
 		form(action='/patron_detail/' + patron.id + '?_method=PUT', method='post')
 			include partials/patron_form
 		h2 Loan History
@@ -22,9 +22,9 @@ block content
 				each loan, index in loans
 					tr
 						td
-							a(href='../../../../book_detail/' + books[index].id + '/edit') #{books[index].title}
+							a(href='../../../../book_detail/' + loans[index].book.id + '/edit') #{loans[index].book.title}
 						td
-							a(href='javascript:window.location.reload(true)') #{patron.first_name} #{patron.last_name}
+							a(href='javascript:window.location.reload(true)') #{loans[0].dataValues.patron.dataValues.first_name} #{loans[0].dataValues.patron.dataValues.last_name}
 						td #{loans[index].dataValues.loaned_on}
 						td #{loans[index].dataValues.return_by}
 						td #{loans[index].dataValues.returned_on}

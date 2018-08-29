@@ -45,7 +45,7 @@ router.post('/new_patron', (req, res, next) => {
 	});
 });
 
-router.get('/patron_detail/:id/edit', (req, res, next) => {
+/*router.get('/patron_detail/:id/edit', (req, res, next) => {
 	Patron.findById(req.params.id).then((patrons) => {
 		Loan.findAll({ where: { patron_id: [req.params.id] } }).then((loans) => {
 			// Maps over the loans object to get all book_id's in order to dispaly book titles on the patron_detail page.
@@ -67,7 +67,27 @@ router.get('/patron_detail/:id/edit', (req, res, next) => {
 			});
 		});
 	});
+});*/
+//------------------------------------------------------------
+router.get('/patron_detail/:id/edit', (req, res, next) => {
+	Loan.findAll({
+		where: { patron_id: req.params.id },
+		include: [ { model: Patron, where: { id: req.params.id } },
+		{ model: Book } ]
+	}).then((loans) => {
+console.log('loans>>>>>>>>>>>>>>>>', loans[0].book.title);
+		res.render('patron_detail', {
+			loans: loans,
+			patron: Patron,
+			books: Book,
+			button_text: 'Update',
+		});
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
 });
+//------------------------------------------------------------
+
 
 router.put('/patron_detail/:id', (req, res, next) => {
 	// Update a Patrons data in the patrons table.
