@@ -13,7 +13,7 @@ table
 			each loan, index in loans
 				tr
 					td
-						a(href='javascript:window.location.reload(true)') #{book.title}
+						a(href='') #{book.title}
 					td
 						a(href='../../../patron_detail/' + patrons[index].dataValues.id + '/edit') #{patrons[index].dataValues.first_name} #{patrons[index].dataValues.last_name}
 					td #{loans[index].dataValues.loaned_on}

@@ -75,7 +75,7 @@ router.get('/patron_detail/:id/edit', (req, res, next) => {
 		include: [ { model: Patron, where: { id: req.params.id } },
 		{ model: Book } ]
 	}).then((loans) => {
-console.log('loans>>>>>>>>>>>>>>>>', loans[0].book.title);
+// console.log('loans>>>>>>>>>>>>>>>>', loans[0].book.title);
 		res.render('patron_detail', {
 			loans: loans,
 			patron: Patron,
@@ -97,27 +97,22 @@ router.put('/patron_detail/:id', (req, res, next) => {
 		res.redirect('/patrons');
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
-			Patron.findById(req.params.id).then((patrons) => {
-				Loan.findAll({ where: { patron_id: [req.params.id] } }).then((loans) => {
-					// Maps over the loans object to get all book_id's in order to dispaly book titles on the patron_detail page.
-					let findAllBookIds = loans.map( (curr, idx, loan) => loan[idx].book_id );
-
-					Book.findAll({ where: { id: [findAllBookIds] } }).then((books) => {
-						res.render('patron_detail', {
-							patron: patrons,
-							loans: loans,
-							books: books,
-							button_text: 'Update',
-							errors: error.errors,
-						});
-					});
+			Loan.findAll({
+				where: { patron_id: req.params.id },
+				include: [ { model: Patron, where: { id: req.params.id } },
+				{ model: Book } ]
+			}).then((loans) => {
+				res.render('patron_detail', {
+					loans: loans,
+					patron: Patron,
+					books: Book,
+					button_text: 'Update',
+					errors: error.errors
 				});
+			}).catch((error) => {
+				res.sendStatus(500, error);
 			});
-		} else {
-			res.sendStatus(404, error);
 		}
-	}).catch((error) => {
-		res.sendStatus(500, error);
 	});
 });
 
