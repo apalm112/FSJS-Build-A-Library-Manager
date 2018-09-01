@@ -46,7 +46,26 @@ router.post('/new_patron', (req, res, next) => {
 });
 
 router.get('/patron_detail/:id/edit', (req, res, next) => {
-	Loan.findAll({
+	// Change to Patron.findAll() in order to fix the bug of a new patron link click to the patrons detail page not working.
+	Patron.findAll({
+		where: { id: req.params.id },
+		include: [ { model: Loan, where: { patron_id: req.params.id } },
+		// { model: Book }
+		]
+	}).then((patrons) => {
+		console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', patrons[0].first_name, patrons[0].loans[0]);
+		res.render('patron_detail', {
+			loans: Loan,
+			patron: patrons,
+			books: Book,
+			button_text: 'Update',
+		});
+	}).catch((error) => {
+		res.sendStatus(500, error);
+	});
+});
+	// Original working code:
+/*	Loan.findAll({
 		where: { patron_id: req.params.id },
 		include: [ { model: Patron, where: { id: req.params.id } },
 		{ model: Book } ]
@@ -60,7 +79,7 @@ router.get('/patron_detail/:id/edit', (req, res, next) => {
 	}).catch((error) => {
 		res.sendStatus(500, error);
 	});
-});
+});*/
 
 router.put('/patron_detail/:id', (req, res, next) => {
 	// Update a Patrons data in the patrons table.
