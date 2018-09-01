@@ -21,7 +21,7 @@ module.exports = {
 				allowNull: false,
 			},
 			first_published: {
-				type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
 			}
 		});
 	},

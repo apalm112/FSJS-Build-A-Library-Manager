@@ -25,14 +25,7 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-sequelize.sync(
-/*	Sauce: https://www.codementor.io/mirko0/how-to-use-sequelize-with-node-and-express-i24l67cuz
-	sequelize.sync() will create all of the tables in the specified database. If you pass {force: true} as a parameter to sync method, it will remove tables on every startup and create new ones. Needless to say, this is a viable option only for development.
-	*/
-	// {
-	// 	force: true
-	// }
-).then(function() {
+sequelize.sync().then(function() {
 	server.listen(port);
 });
 server.on('error', onError);

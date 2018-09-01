@@ -28,8 +28,6 @@ block content
 							a(href='../book_detail/' + loans[index].dataValues.book.dataValues.id + '/edit') #{loans[index].dataValues.book.title}
 						td
 							a(href='../patron_detail/' + loans[index].dataValues.patron.dataValues.id + '/edit') #{loans[index].dataValues.patron.dataValues.first_name} #{loans[index].dataValues.patron.dataValues.last_name}	
-							//- These two lines below Only work With NO 'db:migrate' having been activated in the CLI.
-							//- #{loans[index].patron.first_name} #{loans[index].patron.last_name}
 						td #{loan.loaned_on}
 						td #{loan.return_by}
 						td #{loan.returned_on}

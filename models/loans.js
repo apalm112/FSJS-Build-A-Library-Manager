@@ -10,25 +10,15 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		book_id: {
 			type: DataTypes.INTEGER,
-			validate: {
-				notEmpty: {
-					msg: 'Book ID is required!'
-				}
-			}
 		},
 		patron_id: {
 			type: DataTypes.INTEGER,
-			validate: {
-				notEmpty: {
-					msg: 'Patron ID is required!'
-				}
-			}
 		},
 		loaned_on: {
 			type: DataTypes.DATEONLY,
 			validate: {
 				notEmpty: {
-					msg: 'Loan Date is required!'
+					msg: 'Loaned On Date is required!'
 				},
 				isDate: {
 					msg: 'Loaned On Date Must Be a Valid Date'
