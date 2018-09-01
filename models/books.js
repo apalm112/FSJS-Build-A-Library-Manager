@@ -5,25 +5,25 @@ module.exports = (sequelize, DataTypes) => {
 		title: {
 			type: DataTypes.STRING,
 			validate: {
-				notEmpty: {
-					msg: 'Book Title is required!'
-				}
+				notEmpty: {	msg: 'Book Title is required!' }
 			}
 		},
 		author: {
 			type: DataTypes.STRING,
 			validate: {
-				notEmpty: {
-					msg: 'Author is required!'
-				}
+				not: {
+					args: /^([0-9]*)$/,
+					msg: 'Valid Author Name is Required.'
+				},
 			}
 		},
 		genre: {
 			type: DataTypes.STRING,
 			validate: {
-				notEmpty: {
-					msg: 'Book genre is required!'
-				}
+				not: {
+					args: /^([0-9]*)$/,
+					msg: 'Valid Book Genre is Required.'
+				},
 			}
 		},
 		first_published: {
@@ -31,10 +31,14 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: true,
 			defaultValue: null,
 			validate: {
-				isNumeric: {
-					msg: 'Published Date Must Be a Valid Year format.'
+				not: {
+					args: ['[a-z]','i'],
+					msg: 'Published Date Must Be Integers Only.'
 				},
-				// max: 4,
+				len: {
+					args: [0, 4],
+					msg: 'Published Date Must Be Max Four Digits in Length.'
+				},
 			}
 		},
 	}, {

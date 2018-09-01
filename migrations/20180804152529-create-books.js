@@ -22,7 +22,6 @@ module.exports = {
 			},
 			first_published: {
 				type: Sequelize.INTEGER,
-				allowNull: true
 			}
 		});
 	},
