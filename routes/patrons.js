@@ -46,40 +46,29 @@ router.post('/new_patron', (req, res, next) => {
 });
 
 router.get('/patron_detail/:id/edit', (req, res, next) => {
-	// Change to Patron.findAll() in order to fix the bug of a new patron link click to the patrons detail page not working.
-	Patron.findAll({
-		where: { id: req.params.id },
-		include: [ { model: Loan, where: { patron_id: req.params.id } },
-		// { model: Book }
-		]
-	}).then((patrons) => {
-		console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', patrons[0].first_name, patrons[0].loans[0]);
-		res.render('patron_detail', {
-			loans: Loan,
-			patron: patrons,
-			books: Book,
-			button_text: 'Update',
-		});
-	}).catch((error) => {
-		res.sendStatus(500, error);
-	});
-});
-	// Original working code:
-/*	Loan.findAll({
+	// Find a patrons data from all three tables based on their loan history.
+	Loan.findAll({
 		where: { patron_id: req.params.id },
 		include: [ { model: Patron, where: { id: req.params.id } },
 		{ model: Book } ]
 	}).then((loans) => {
-		res.render('patron_detail', {
-			loans: loans,
-			patron: Patron,
-			books: Book,
-			button_text: 'Update',
-		});
+		if ( loans.length === 0 ) {
+			// If the patron has no loan history yet (i.e.-- is a newly added patron), then their data must be fetched from the patrons table.
+			Patron.findById(req.params.id).then((patrons) => {
+				res.render('patron_detail', {
+					patron: patrons,
+				});
+			});
+		} else {
+			res.render('patron_detail', {
+				loans: loans,
+				button_text: 'Update',
+			});
+		}
 	}).catch((error) => {
 		res.sendStatus(500, error);
 	});
-});*/
+});
 
 router.put('/patron_detail/:id', (req, res, next) => {
 	// Update a Patrons data in the patrons table.
@@ -94,13 +83,22 @@ router.put('/patron_detail/:id', (req, res, next) => {
 				include: [ { model: Patron, where: { id: req.params.id } },
 				{ model: Book } ]
 			}).then((loans) => {
-				res.render('patron_detail', {
-					loans: loans,
-					patron: Patron,
-					books: Book,
-					button_text: 'Update',
-					errors: error.errors
-				});
+				if ( loans.length === 0 ) {
+					// If the patron has no loan history yet (i.e.-- is a newly added patron), then their data must be fetched from the patrons table.
+					Patron.findById(req.params.id).then((patrons) => {
+						res.render('patron_detail', {
+							patron: patrons,
+							button_text: 'Update',
+							errors: error.errors,
+						});
+					});
+				} else {
+					res.render('patron_detail', {
+						loans: loans,
+						button_text: 'Update',
+						errors: error.errors
+					});
+				}
 			}).catch((error) => {
 				res.sendStatus(500, error);
 			});

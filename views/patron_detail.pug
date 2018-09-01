@@ -5,104 +5,103 @@ block content
 		
 		include errors
 		
-		h1 Patron: #{patron[0].first_name} #{patron[0].last_name}
-		form(action='/patron_detail/' + patron[0].id + '?_method=PUT', method='post')
-			
-			p
-				label(for='first_name') First Name
-				input#first_name(type='text' name='first_name' value= patron[0].first_name)
-			p
-				label(for='last_name') Last Name
-				input#last_name(type='text' name='last_name' value= patron[0].last_name)
-			p
-				label(for='address')  Address
-				input#address(type='text' name='address' value= patron[0].address)
-			p
-				label(for='email') Email
-				input#email(type='text' name ='email'  value= patron[0].email)
-			p
-				label(for='library_id') Library ID
-				input#library_id(type='text' name='library_id' value= patron[0].library_id)
-			p
-				label(for='zip_code') Zip Code
-				input#zip_code(type='text' name='zip_code' value= patron[0].zip_code)
-			p
-				input(type='submit' value= button_text)
-			
-		h2 Loan History
-		table
-			thead
-				tr
-					th Book
-					th Patron 
-					th Loaned on
-					th Return by 
-					th Returned on
-					th Action
-			tbody
-				//- 		if loans
-				//- 			each loan, index in loans
-				tr
-					td
-						//- a(href='../../../../book_detail/' + loans[index].book.id + '/edit') #{loans[index].book.title}
-					td
-						a(href='' ) #{patron[0].first_name} #{patron[0].last_name}
-					td #{patron[0].loans[0].loaned_on}
-					td #{patron[0].loans[0].return_by}
-					td #{patron[0].loans[0].returned_on}
-					td
-						if patron[0].loans[0].loaned_on !== null
-							if patron[0].loans[0].returned_on === null			
-								a.button(href='../../../return_book/' + patron[0].id) Return Book
+		//- This block is for a new patron w/ no loan history.
+		if patron
+			h1 Patron: #{patron.first_name} #{patron.last_name}
+			form(action='/patron_detail/' + patron.id + '?_method=PUT', method='post')
+				
+				p
+					label(for='first_name') First Name
+					input#first_name(type='text' name='first_name' value= patron.first_name)
+				p
+					label(for='last_name') Last Name
+					input#last_name(type='text' name='last_name' value= patron.last_name)
+				p
+					label(for='address')  Address
+					input#address(type='text' name='address' value= patron.address)
+				p
+					label(for='email') Email
+					input#email(type='text' name ='email'  value= patron.email)
+				p
+					label(for='library_id') Library ID
+					input#library_id(type='text' name='library_id' value= patron.library_id)
+				p
+					label(for='zip_code') Zip Code
+					input#zip_code(type='text' name='zip_code' value= patron.zip_code)
+				p
+					input(type='submit' value= button_text)
+				
+			h2 Loan History
+			table
+				thead
+					tr
+						th Book
+						th Patron 
+						th Loaned on
+						th Return by 
+						th Returned on
+						th Action
+				tbody
+					tr
+						td
+							a(href='' )
+						td
+							a(href='' )
+						td 
+						td 
+						td
+						td
+							
 		
 		
-		//- Original Working Code:
-		//- h1 Patron: #{loans[0].dataValues.patron.dataValues.first_name} #{loans[0].dataValues.patron.dataValues.last_name}
-		//- form(action='/patron_detail/' + loans[0].patron.id + '?_method=PUT', method='post')
-		//- 	
-		//- 	p
-		//- 		label(for='first_name') First Name
-		//- 		input#first_name(type='text' name='first_name' value= loans[0].patron.first_name)
-		//- 	p
-		//- 		label(for='last_name') Last Name
-		//- 		input#last_name(type='text' name='last_name' value= loans[0].patron.last_name)
-		//- 	p
-		//- 		label(for='address')  Address
-		//- 		input#address(type='text' name='address' value= loans[0].patron.address)
-		//- 	p
-		//- 		label(for='email') Email
-		//- 		input#email(type='text' name ='email'  value= loans[0].patron.email)
-		//- 	p
-		//- 		label(for='library_id') Library ID
-		//- 		input#library_id(type='text' name='library_id' value= loans[0].patron.library_id)
-		//- 	p
-		//- 		label(for='zip_code') Zip Code
-		//- 		input#zip_code(type='text' name='zip_code' value= loans[0].patron.zip_code)
-		//- 	p
-		//- 		input(type='submit' value= button_text)
-		//- 	
-		//- h2 Loan History
-		//- table
-		//- 	thead
-		//- 		tr
-		//- 			th Book
-		//- 			th Patron 
-		//- 			th Loaned on
-		//- 			th Return by 
-		//- 			th Returned on
-		//- 			th Action
-		//- 	tbody
-		//- 		if loans
-		//- 			each loan, index in loans
-		//- 				tr
-		//- 					td
-		//- 						a(href='../../../../book_detail/' + loans[index].book.id + '/edit') #{loans[index].book.title}
-		//- 					td
-		//- 						a(href='' ) #{loans[0].dataValues.patron.dataValues.first_name} #{loans[0].dataValues.patron.dataValues.last_name}
-		//- 					td #{loans[index].dataValues.loaned_on}
-		//- 					td #{loans[index].dataValues.return_by}
-		//- 					td #{loans[index].dataValues.returned_on}
-		//- 					td
-		//- 						if loans[index].dataValues.loaned_on !== null
-		//- 							if loans[index].dataValues.returned_on === null			
-		//- 								a.button(href='../../../return_book/' + loans[index].id) Return Book
+		//- This block is for patrons w/ a loan history.
+		if loans
+			h1 Patron: #{loans[0].dataValues.patron.dataValues.first_name} #{loans[0].dataValues.patron.dataValues.last_name}
+			form(action='/patron_detail/' + loans[0].patron.id + '?_method=PUT', method='post')
+				
+				p
+					label(for='first_name') First Name
+					input#first_name(type='text' name='first_name' value= loans[0].patron.first_name)
+				p
+					label(for='last_name') Last Name
+					input#last_name(type='text' name='last_name' value= loans[0].patron.last_name)
+				p
+					label(for='address')  Address
+					input#address(type='text' name='address' value= loans[0].patron.address)
+				p
+					label(for='email') Email
+					input#email(type='text' name ='email'  value= loans[0].patron.email)
+				p
+					label(for='library_id') Library ID
+					input#library_id(type='text' name='library_id' value= loans[0].patron.library_id)
+				p
+					label(for='zip_code') Zip Code
+					input#zip_code(type='text' name='zip_code' value= loans[0].patron.zip_code)
+				p
+					input(type='submit' value= button_text)
+				
+			h2 Loan History
+			table
+				thead
+					tr
+						th Book
+						th Patron 
+						th Loaned on
+						th Return by 
+						th Returned on
+						th Action
+				tbody
+					if loans
+						each loan, index in loans
+							tr
+								td
+									a(href='../../../../book_detail/' + loans[index].book.id + '/edit') #{loans[index].book.title}
+								td
+									a(href='' ) #{loans[0].dataValues.patron.dataValues.first_name} #{loans[0].dataValues.patron.dataValues.last_name}
+								td #{loans[index].dataValues.loaned_on}
+								td #{loans[index].dataValues.return_by}
+								td #{loans[index].dataValues.returned_on}
+								td
+									if loans[index].dataValues.loaned_on !== null
+										if loans[index].dataValues.returned_on === null			
+											a.button(href='../../../return_book/' + loans[index].id) Return Book
