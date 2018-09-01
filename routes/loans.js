@@ -18,14 +18,7 @@ const return_by = dateLibrary.format().slice(0,10);
 router.get('/loans', (req, res, next) => {
 	// This route displays all loans in the library.db.  It needs the `loans` to be plural in order to work properly!
 	Loan.findAll({
-		include: [
-			{
-				model: Book
-			},
-			{
-				model: Patron
-			}
-		]
+		include: [{	model: Book	}, {	model: Patron	}	]
 	}).then(loans => {
 		// console.log(JSON.stringify(loans));
 		res.render('loans', {
