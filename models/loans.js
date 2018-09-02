@@ -17,9 +17,6 @@ module.exports = (sequelize, DataTypes) => {
 		loaned_on: {
 			type: DataTypes.DATEONLY,
 			validate: {
-				notEmpty: {
-					msg: 'Loaned On Date is required!'
-				},
 				isDate: {
 					msg: 'Loaned On Date Must Be a Valid Date'
 				}
@@ -28,9 +25,6 @@ module.exports = (sequelize, DataTypes) => {
 		return_by: {
 			type: DataTypes.DATEONLY,
 			validate: {
-				notEmpty: {
-					msg: 'Return By Date is required!'
-				},
 				isDate:  {
 					msg: 'Return By Date Must Be a Valid Date'
 				}
@@ -39,9 +33,6 @@ module.exports = (sequelize, DataTypes) => {
 		returned_on: {
 			type: DataTypes.DATEONLY,
 			validate: {
-				notEmpty: {
-					msg: 'Returned on Date Must Be Entered.'
-				},
 				isDate:  {
 					msg: 'Returned On Date Must Be a Valid Date'
 				}
