@@ -3,10 +3,10 @@
 
 Clone the repo
 
-cd into the folder
+`cd` into the folder
 
-npm i
+`$ npm i`
 
-npm start
+`$ npm start`
 
 
