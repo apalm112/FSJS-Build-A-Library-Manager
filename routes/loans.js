@@ -136,9 +136,9 @@ router.get('/checked_loans', (req, res, next) => {
 });
 
 router.get('/return_book/:id', (req, res, next) => {
-	Loan.findById(req.params.id).then(loans => {
-		Patron.findById(loans.patron_id).then( (patrons) => {
-			Book.findById(loans.book_id).then( (books) => {
+	Loan.findByPk(req.params.id).then(loans => {
+		Patron.findByPk(loans.patron_id).then( (patrons) => {
+			Book.findByPk(loans.book_id).then( (books) => {
 				res.render('return_book', {
 					loans: loans,
 					patrons: patrons,
@@ -154,7 +154,7 @@ router.get('/return_book/:id', (req, res, next) => {
 });
 
 router.put('/return_book/:id', (req, res, next) => {
-	Loan.findById(req.params.id).then((loans) => {
+	Loan.findByPk(req.params.id).then((loans) => {
 		if(loans) {
 			return loans.update(req.body);
 		} else {
@@ -165,9 +165,9 @@ router.put('/return_book/:id', (req, res, next) => {
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 
-			Loan.findById(req.params.id).then(loans => {
-				Patron.findById(loans.patron_id).then( (patrons) => {
-					Book.findById(loans.book_id).then( (books) => {
+			Loan.findByPk(req.params.id).then(loans => {
+				Patron.findByPk(loans.patron_id).then( (patrons) => {
+					Book.findByPk(loans.book_id).then( (books) => {
 						res.render('return_book', {
 							loans: loans,
 							patrons: patrons,

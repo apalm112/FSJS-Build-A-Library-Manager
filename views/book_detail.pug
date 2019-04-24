@@ -1,10 +1,10 @@
 extends index
 
 block content
-	
+	h1= title
+		
 	include errors
 	
-	h1= title
 	form(action='/' + book.id + '?_method=PUT', method='post')
 		include partials/book_form
 	include partials/loan_history

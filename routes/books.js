@@ -10,6 +10,7 @@ const Loan = require('../models').loans;
 
 router.get('/new_book', (req, res, next) => {
 	/* Render the new book form. */
+	console.log(req.params.id);
 	res.render('new_book', {
 		book: Book.build(req.body),
 		title: 'New Book',
@@ -52,9 +53,7 @@ router.get('/overdue_books', (req, res, next) => {
 	const today = dayjs().format().slice(0,10);
 	Loan.findAll({
 		where: {
-			return_by: {
-				[Op.lt]: today,
-			},
+			return_by: { [Op.lt]: today },
 			returned_on: null,
 		},
 		include: [{
@@ -65,12 +64,15 @@ router.get('/overdue_books', (req, res, next) => {
 		let findAllBookIds = loans.map((curr, idx, loan) => {
 			return loan[idx].book_id;
 		});
-		Book.findAll({ where: { id: [findAllBookIds] }}).then((books) => {
+		Book.findAll({ where: { id: {
+			[Op.in]: [...findAllBookIds] }}}).then((books) => {
 			res.render('overdue_books', {
 				loans: loans,
 				books: books,
 				title: 'Overdue Books'
 			});
+			console.log('========================', findAllBookIds);
+			console.log('========================books', books);
 		});
 	});
 });
@@ -78,7 +80,7 @@ router.get('/overdue_books', (req, res, next) => {
 router.get('/book_detail/:id/edit', (req, res, next) => {
 	// GET individual Book Details, when an individual book link is clicked on the `/books` page, the user is redirected by this route to the `/book_detail/:id/edit` page.
 	// Get the book_id of the book clicked on in books
-	Book.findById(req.params.id).then(books => {
+	Book.findByPk(req.params.id).then(books => {
 		// get that books data & render it to book_detail
 		Loan.findAll({ where: { book_id: [req.params.id] } }).then((loans) => {
 			// Maps over the loans object to get all book_id's in order to dispaly book titles on the patron_detail page.
@@ -106,7 +108,7 @@ router.get('/book_detail/:id/edit', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
 	/* PUT, the `books/book_detail/:id/edit` page,
 	update/edit a book in the library.db */
-	Book.findById(req.params.id).then((books) => {
+	Book.findByPk(req.params.id).then((books) => {
 		if(books) {
 	// What's happening here is the update() method is returning a Promise, that passes the next value down the .then chain.
 			return books.update(req.body);
@@ -119,7 +121,7 @@ router.put('/:id', (req, res, next) => {
 	}).catch((error) => {
 		if(error.name === 'SequelizeValidationError') {
 
-			Book.findById(req.params.id).then(book => {
+			Book.findByPk(req.params.id).then(book => {
 				Loan.findAll({ where: { book_id: [req.params.id] } }).then((loans) => {
 					let findAllPatronIds = loans.map( (curr, idx, loan) => loan[idx].patron_id );
 					Patron.findAll({ where: { id: [findAllPatronIds] } }).then((patrons) => {
