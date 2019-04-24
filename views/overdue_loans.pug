@@ -21,11 +21,11 @@ block content
 				th Returned on
 				th Action
 		tbody
-			if loans	
+			if loans, books
 				each loan, index in loans
 					tr
 						td
-						//-	a(href='../../book_detail/' + loans[index].book.id + '/edit') #{loans[index].book.title}
+							a(href='../../book_detail/' + books[index].id + '/edit') #{books[index].title}
 						td
 							a(href='../../patron_detail/' + loans[index].patron.dataValues.id + '/edit') #{loans[index].patron.dataValues.first_name} #{loans[index].patron.dataValues.last_name}
 						td #{loan.loaned_on}

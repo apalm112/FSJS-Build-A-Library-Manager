@@ -71,8 +71,8 @@ router.get('/overdue_books', (req, res, next) => {
 				books: books,
 				title: 'Overdue Books'
 			});
-			console.log('========================', findAllBookIds);
-			console.log('========================books', books);
+			// console.log('========================', findAllBookIds);
+			// console.log('========================books', books);
 		});
 	});
 });

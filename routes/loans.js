@@ -111,7 +111,7 @@ router.get('/overdue_loans', (req, res, next) => {
 			return loan[idx].book_id;
 		});
 
-		Book.findAll({ where: { id: [findAllBookIds] } }).then((books) => {
+		Book.findAll({ where: { id: [...findAllBookIds] } }).then((books) => {
 			res.render('overdue_loans', {
 				loans: loans,
 				books: books,
